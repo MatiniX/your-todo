@@ -6,7 +6,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as RedisStore from 'connect-redis';
 import { RedisModule } from 'redis/redis.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import * as passport from 'passport';
+import { User } from './entities/User';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -17,11 +21,13 @@ import * as passport from 'passport';
       username: 'postgres',
       password: 'postgres',
       database: 'your-todo-dev',
-      entities: [],
+      entities: [User],
       synchronize: true,
       logging: true,
     }),
     RedisModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
