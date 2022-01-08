@@ -25,12 +25,12 @@ export class UserService {
   }
 
   // Rozdeliť na separátne funkcie findByEmail a findByUsername
-  async findByEmailOrUsername(emailOrUsername: string) {
-    if (emailOrUsername.includes('@')) {
-      return await User.findOne({ where: { email: emailOrUsername } });
-    } else {
-      return await User.findOne({ where: { username: emailOrUsername } });
-    }
+  async findByUsername(username: string) {
+    return await User.findOne({ where: { username: username } });
+  }
+
+  async findByEmail(email: string) {
+    return await User.findOne({ where: { email: email } });
   }
 
   async updatePassword(id: number, newPassword: string) {

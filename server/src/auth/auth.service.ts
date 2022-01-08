@@ -13,6 +13,8 @@ import { REDIS } from 'redis/redis.constants';
 import { Redis } from 'ioredis';
 import { FORGET_PASSWORD_PREFIX } from 'src/constants';
 import { sendEmail } from 'src/utils/sendEmail';
+import { validateEmail } from 'src/utils/validateEmail';
+import { validatePassword } from 'src/utils/validatePassword';
 
 @Injectable()
 export class AuthService {
@@ -22,9 +24,13 @@ export class AuthService {
   ) {}
 
   async validateUser(user: LoginUserDto) {
-    const foundUser = await this.userService.findByEmailOrUsername(
-      user.usernameOrEmail,
-    );
+    const foundUser =
+      (await this.userService.findByEmail(user.usernameOrEmail)) ||
+      (await this.userService.findByUsername(user.usernameOrEmail));
+
+    if (!foundUser) {
+      throw new BadRequestException('Account doesnt exists!');
+    }
     const comparePasswords = await argon2.verify(
       foundUser.password,
       user.password,
@@ -38,14 +44,30 @@ export class AuthService {
     return retUser;
   }
 
-  // Validácia hesiel!
   async registerUser(user: RegisterUserDto) {
-    const existingUser = await this.userService.findByEmailOrUsername(
-      user.email,
-    );
+    let existingUser = await this.userService.findByEmail(user.email);
     if (existingUser) {
       throw new BadRequestException('Email already in use!');
     }
+    existingUser = await this.userService.findByUsername(user.username);
+    if (existingUser) {
+      throw new BadRequestException('Username already taken');
+    }
+
+    if (user.username.length < 3) {
+      throw new BadRequestException(
+        'Username must be at least 3 charachters long!',
+      );
+    }
+    if (user.username.includes('@')) {
+      throw new BadRequestException('Username can not contain @ symbol');
+    }
+    if (!validateEmail(user.email)) {
+      throw new BadRequestException('Email is invalid!');
+    }
+
+    validatePassword(user.password);
+
     if (user.password !== user.confirmationPassword) {
       throw new BadRequestException(
         'Password does not match confirmation password',
@@ -59,7 +81,7 @@ export class AuthService {
   }
 
   async generateChangePasswordToken(email: string) {
-    const user = await this.userService.findByEmailOrUsername(email);
+    const user = await this.userService.findByEmail(email);
     if (!user) {
       return false;
     }
@@ -82,7 +104,14 @@ export class AuthService {
       throw new BadRequestException('Your token is expired!');
     }
 
+    validatePassword(newPassword);
+
     const id = Number(userId);
+    const user = this.userService.findById(id);
+    if (!user) {
+      throw new BadRequestException('User no longer exists!');
+    }
+
     await this.userService.updatePassword(id, newPassword);
     await this.redis.del(key);
     return true;
