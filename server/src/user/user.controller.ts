@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Delete,
   Get,
@@ -8,6 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { request } from 'express';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { UserService } from './user.service';
 
@@ -24,24 +26,33 @@ export class UserController {
   // Refaktorizovať! Poslať vhodnú odpoveď na základe úspechu
   @UseGuards(LoggedInGuard)
   @Post('friend-request/:to')
-  async sendFriendRequest(
-    @Req() req,
-    @Param('to', new ParseIntPipe()) toUserId,
-  ) {
+  sendFriendRequest(@Req() req, @Param('to', new ParseIntPipe()) toUserId) {
     const fromUserId = req.session.passport.user.id;
 
-    await this.userService.sendFriendRequest(fromUserId, toUserId);
+    if (fromUserId === toUserId) {
+      throw new BadRequestException(
+        'You can not send friend request to yourself!',
+      );
+    }
+
+    return this.userService.sendFriendRequest(fromUserId, toUserId);
   }
 
   @UseGuards(LoggedInGuard)
   @Get('friend-request/:id')
-  async acceptFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
-    await this.userService.acceptFriendRequest(friendRequestId);
+  acceptFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
+    return this.userService.acceptFriendRequest(friendRequestId);
   }
 
   @UseGuards(LoggedInGuard)
   @Delete('friend-request/:id')
-  async rejectFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
-    await this.userService.rejectFriendRequest(friendRequestId);
+  rejectFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
+    return this.userService.rejectFriendRequest(friendRequestId);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Delete('cancel-friendship/:id')
+  cancelFriendship(@Req() req, @Param('id', new ParseIntPipe()) friendId) {
+    this.userService.cancelFriendship(req.session.passport.user.id, friendId);
   }
 }

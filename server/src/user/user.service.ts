@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/entities/User';
 import * as argon2 from 'argon2';
 import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
@@ -40,15 +40,66 @@ export class UserService {
     await User.update({ id }, { password: hashedPassword });
   }
 
+  /**
+   * Friend requests
+   */
+
   async sendFriendRequest(from: number, to: number) {
     const friendRequest = new FriendRequest();
     const fromUser = await User.findOne(from);
+    if (!fromUser) {
+      throw new BadRequestException(`User with id: ${from} does not exists!`);
+    }
     const toUser = await User.findOne(to);
+    if (!toUser) {
+      throw new BadRequestException(`This user does not exists!`);
+    }
 
     friendRequest.fromUser = fromUser;
     friendRequest.toUser = toUser;
 
-    await friendRequest.save();
+    return await friendRequest.save();
+  }
+
+  async makeFriends(first: number, second: number) {
+    const firstUser = await this.findById(first);
+    if (!firstUser) {
+      throw new BadRequestException(`User with id: ${first} does not exists`);
+    }
+    const secondUser = await this.findById(second);
+    if (!secondUser) {
+      throw new BadRequestException(`User with id: ${second} does not exists`);
+    }
+
+    firstUser.friends = [...firstUser.friends, secondUser];
+    secondUser.friends = [...secondUser.friends, firstUser];
+
+    await firstUser.save();
+    await secondUser.save();
+  }
+
+  async cancelFriendship(first: number, second: number) {
+    const firstUser = await this.findById(first);
+    if (!firstUser) {
+      throw new BadRequestException(`User with id: ${first} does not exists`);
+    }
+    const secondUser = await this.findById(second);
+    if (!secondUser) {
+      throw new BadRequestException(`User with id: ${second} does not exists`);
+    }
+
+    const firstUserFriends = firstUser.friends.filter(
+      (friend) => friend.id !== second,
+    );
+    const secondUserFriends = secondUser.friends.filter(
+      (friend) => friend.id !== first,
+    );
+
+    firstUser.friends = firstUserFriends;
+    secondUser.friends = secondUserFriends;
+
+    await firstUser.save();
+    await secondUser.save();
   }
 
   // Refaktorizovať! Použiť queryBuilder pre lepšie SQL, error checking a handling
@@ -56,24 +107,23 @@ export class UserService {
     const friendRequest = await FriendRequest.findOne(id, {
       relations: ['fromUser', 'toUser'],
     });
+    if (!friendRequest) {
+      throw new BadRequestException('This friend request does not exists!');
+    }
 
-    const fromUser = await this.findById(friendRequest.fromUser.id);
-    const toUser = await this.findById(friendRequest.toUser.id);
-
-    fromUser.friends = [...fromUser.friends, toUser];
-    toUser.friends = [...toUser.friends, fromUser];
-
-    await fromUser.save();
-    await toUser.save();
+    await this.makeFriends(friendRequest.fromUser.id, friendRequest.toUser.id);
 
     friendRequest.state = FriendRequestState.ACCEPTED;
-    await friendRequest.save();
+    return await friendRequest.save();
   }
 
   async rejectFriendRequest(id: number) {
     const friendRequest = await FriendRequest.findOne(id);
+    if (!friendRequest) {
+      throw new BadRequestException('Friend request does not exists!');
+    }
 
     friendRequest.state = FriendRequestState.REJECTED;
-    await friendRequest.save();
+    return await friendRequest.save();
   }
 }
