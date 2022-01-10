@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -10,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { FriendRequest } from './FriendRequest';
+import { Task } from './Task';
 
 @Entity()
 export class User extends BaseEntity {
@@ -22,7 +24,8 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Exclude()
+  @Column({ select: false })
   password: string;
 
   @ManyToMany(() => User, { cascade: false })
@@ -34,6 +37,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => FriendRequest, (request) => request.toUser)
   recievedFriendRequests: FriendRequest[];
+
+  @OneToMany(() => Task, (task) => task.fromUser)
+  sentTasks: Task[];
+
+  @OneToMany(() => Task, (task) => task.toUser)
+  recievedTasks: Task[];
 
   @CreateDateColumn()
   createdAt: Date;

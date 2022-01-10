@@ -20,10 +20,22 @@ export class UserService {
       console.log(error);
     }
   }
-
+  /**
+   * @description
+   * Ak nie je potrebné všetky atribúty User entity,
+   * tak použiť User.findOne() metódu namiesto tejto
+   * @returns
+   * Navráti PLNE hydratovanú User entitu!
+   */
   async findById(id: number) {
     return await User.findOne(id, {
-      relations: ['friends', 'sentFriendRequests', 'recievedFriendRequests'],
+      relations: [
+        'friends',
+        'sentFriendRequests',
+        'recievedFriendRequests',
+        'sentTasks',
+        'recievedTasks',
+      ],
     });
   }
 

@@ -12,6 +12,8 @@ import * as passport from 'passport';
 import { User } from './entities/User';
 import { AuthController } from './auth/auth.controller';
 import { FriendRequest } from './entities/FriendRequest';
+import { Task } from './entities/Task';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -22,13 +24,14 @@ import { FriendRequest } from './entities/FriendRequest';
       username: 'postgres',
       password: 'postgres',
       database: 'your-todo-dev',
-      entities: [User, FriendRequest],
+      entities: [User, FriendRequest, Task],
       synchronize: true,
       logging: true,
     }),
     RedisModule,
     AuthModule,
     UserModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],
