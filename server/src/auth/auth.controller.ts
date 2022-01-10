@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { LocalGuard } from 'src/entities/guards/local.guard';
-import { LoggedInGuard } from 'src/entities/guards/logged-in.guard';
+import { LocalGuard } from 'src/guards/local.guard';
+import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './models/login-user.dto';
 import { RegisterUserDto } from './models/register-user.dto';

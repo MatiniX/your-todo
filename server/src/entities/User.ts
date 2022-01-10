@@ -3,9 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { FriendRequest } from './FriendRequest';
 
 @Entity()
 export class User extends BaseEntity {
@@ -20,6 +24,16 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  @ManyToMany(() => User, { cascade: false })
+  @JoinTable()
+  friends: User[];
+
+  @OneToMany(() => FriendRequest, (request) => request.fromUser)
+  sentFriendRequests: FriendRequest[];
+
+  @OneToMany(() => FriendRequest, (request) => request.toUser)
+  recievedFriendRequests: FriendRequest[];
 
   @CreateDateColumn()
   createdAt: Date;

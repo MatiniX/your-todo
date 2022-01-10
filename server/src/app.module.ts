@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import * as passport from 'passport';
 import { User } from './entities/User';
 import { AuthController } from './auth/auth.controller';
+import { FriendRequest } from './entities/FriendRequest';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { AuthController } from './auth/auth.controller';
       username: 'postgres',
       password: 'postgres',
       database: 'your-todo-dev',
-      entities: [User],
+      entities: [User, FriendRequest],
       synchronize: true,
       logging: true,
     }),
