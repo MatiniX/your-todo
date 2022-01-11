@@ -6,10 +6,6 @@ import { UpdateTaskDto } from './models/update-task.dto';
 
 @Injectable()
 export class TaskService {
-  async findById(id: number) {
-    return await Task.findOne(id, { relations: ['toUser', 'fromUser'] });
-  }
-
   async getAllByToUserId(toUserId: number) {
     const allTasks = await Task.find({
       where: { toUser: toUserId },
@@ -29,9 +25,13 @@ export class TaskService {
   }
 
   async getById(taskId: number) {
-    return await Task.findOne(taskId, {
+    const task = await Task.findOne(taskId, {
       relations: ['fromUser', 'toUser'],
     });
+    if (!task) {
+      throw new BadRequestException(`Task with id: ${taskId} does not exists!`);
+    }
+    return task;
   }
 
   async createTask(task: CreateTaskDto) {
@@ -51,6 +51,21 @@ export class TaskService {
       throw new BadRequestException(
         `User with id: ${task.toUserId} does not exists!`,
       );
+    }
+
+    const existingTask = await Task.findOne({
+      where: { toUser: toUser.id, fromUser: fromUser.id },
+    });
+    if (existingTask) {
+      // prettier-ignore
+      const existingTaskCreateDate = existingTask.createdAt.setHours(0, 0, 0, 0);
+      const newTaskCreateDate = new Date().setHours(0, 0, 0, 0);
+
+      if (existingTaskCreateDate === newTaskCreateDate) {
+        throw new BadRequestException(
+          'You only set one task per day for your friend ;)',
+        );
+      }
     }
 
     newTask.title = task.title;
