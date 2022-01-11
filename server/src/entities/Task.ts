@@ -12,6 +12,13 @@ import {
 } from 'typeorm';
 import { User } from './User';
 
+export enum TaskState {
+  AWAITING_COMPLETION = 'awaitng',
+  AWAITING_REVIEW = 'review',
+  FULFILLED = 'fulfilled',
+  UNFULFILLED = 'unfulfilled',
+}
+
 @Entity()
 export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -23,8 +30,12 @@ export class Task extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ default: false })
-  completed: boolean;
+  @Column({
+    type: 'enum',
+    enum: TaskState,
+    default: TaskState.AWAITING_COMPLETION,
+  })
+  taskState: TaskState;
 
   @ManyToOne(() => User, (user) => user.sentTasks)
   fromUser: User;

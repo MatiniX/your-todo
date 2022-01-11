@@ -1,24 +1,54 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Task } from 'src/entities/Task';
+import { Task, TaskState } from 'src/entities/Task';
 import { User } from 'src/entities/User';
 import { CreateTaskDto } from './models/create-task.dto';
 import { UpdateTaskDto } from './models/update-task.dto';
 
 @Injectable()
 export class TaskService {
-  async getAllByToUserId(toUserId: number) {
+  /**
+   * @returns all tasks that user with toUserId has recieved
+   */
+  async getAllRecieved(toUserId: number) {
     const allTasks = await Task.find({
       where: { toUser: toUserId },
-      relations: ['fromUser', 'toUser'],
+      relations: ['fromUser'],
     });
 
     return allTasks;
   }
 
-  async getAllByFromUserId(fromUserId: number) {
+  /**
+   * @returns all tasks that user with toUserId has sent
+   */
+  async getAllSent(fromUserId: number) {
     const allTasks = await Task.find({
       where: { fromUser: fromUserId },
-      relations: ['fromUser', 'toUser'],
+      relations: ['toUser'],
+    });
+
+    return allTasks;
+  }
+
+  /**
+   * @returns all task that user with toUserId has to complete
+   */
+  async getAllUncomplete(toUserId: number) {
+    const allTasks = await Task.find({
+      where: { toUser: toUserId, taskState: TaskState.AWAITING_COMPLETION },
+      relations: ['fromUser'],
+    });
+
+    return allTasks;
+  }
+
+  /**
+   * @returns all task that user with fromUserId has to review
+   */
+  async getAllForReview(fromUserId: number) {
+    const allTasks = await Task.find({
+      where: { fromUser: fromUserId, taskState: TaskState.AWAITING_REVIEW },
+      relations: ['toUser'],
     });
 
     return allTasks;
@@ -85,11 +115,19 @@ export class TaskService {
     );
   }
 
-  async deleteTask(taskId: number) {
-    return await Task.delete(taskId);
+  async setForReview(taskId: number) {
+    return await Task.update(taskId, { taskState: TaskState.AWAITING_REVIEW });
   }
 
-  async setComplete(taskId: number) {
-    return await Task.update(taskId, { completed: true });
+  async acceptTaskCompletion(taskId: number) {
+    return await Task.update(taskId, { taskState: TaskState.FULFILLED });
+  }
+
+  async rejectTaskCompletion(taskId: number) {
+    return await Task.update(taskId, { taskState: TaskState.UNFULFILLED });
+  }
+
+  async deleteTask(taskId: number) {
+    return await Task.delete(taskId);
   }
 }

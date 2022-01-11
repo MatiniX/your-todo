@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/entities/User';
 import * as argon2 from 'argon2';
 import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
+import { getConnection } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -40,11 +41,17 @@ export class UserService {
   }
 
   async findByUsername(username: string) {
-    return await User.findOne({ where: { username: username } });
+    return await User.findOne({
+      where: { username: username },
+      select: ['id', 'password', 'username', 'email'],
+    });
   }
 
   async findByEmail(email: string) {
-    return await User.findOne({ where: { email: email } });
+    return await User.findOne({
+      where: { email: email },
+      select: ['id', 'password', 'username', 'email'],
+    });
   }
 
   async updatePassword(id: number, newPassword: string) {
@@ -137,5 +144,16 @@ export class UserService {
 
     friendRequest.state = FriendRequestState.REJECTED;
     return await friendRequest.save();
+  }
+
+  async areFriends(first: number, second: number) {
+    const result: Array<any> = await getConnection().query(
+      `
+    select * from "user_friends_user"
+    where "userId_1" = $1 and "userId_2" = $2;
+    `,
+      [first, second],
+    );
+    return result.length > 0;
   }
 }

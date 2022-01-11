@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
@@ -24,9 +23,11 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Exclude()
   @Column({ select: false })
   password: string;
+
+  @Column({ default: 0 })
+  trustPoints: number;
 
   @ManyToMany(() => User, { cascade: false })
   @JoinTable()
