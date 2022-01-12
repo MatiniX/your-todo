@@ -13,7 +13,7 @@ import {
 import { User } from './User';
 
 export enum TaskState {
-  AWAITING_COMPLETION = 'awaitng',
+  AWAITING_COMPLETION = 'awaiting',
   AWAITING_REVIEW = 'review',
   FULFILLED = 'fulfilled',
   UNFULFILLED = 'unfulfilled',
@@ -29,6 +29,9 @@ export class Task extends BaseEntity {
 
   @Column({ nullable: true })
   description: string;
+
+  @Column({ default: false })
+  seen: boolean;
 
   @Column({
     type: 'enum',

@@ -9,7 +9,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { request } from 'express';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { UserService } from './user.service';
 
@@ -19,9 +18,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('details')
-  async details(@Req() req) {
-    console.log(await this.userService.areFriends(1, 2));
-    return this.userService.findById(req.session.passport.user.id);
+  details(@Req() req) {
+    this.userService.findById(req.session.passport.user.id);
+  }
+
+  @Get('notifications')
+  getNotifications(@Req() req) {
+    this.userService.getNotifications(req.session.passport.user.id);
   }
 
   @Get('friend-request/:id')

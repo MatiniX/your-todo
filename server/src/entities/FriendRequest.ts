@@ -1,12 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 
@@ -21,6 +20,9 @@ export class FriendRequest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ default: false })
+  seen: boolean;
+
   @Column({
     type: 'enum',
     enum: FriendRequestState,
@@ -33,4 +35,10 @@ export class FriendRequest extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.recievedFriendRequests)
   toUser: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
