@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Task, TaskState } from 'src/entities/Task';
 import { User } from 'src/entities/User';
+import { getConnection } from 'typeorm';
 import { CreateTaskDto } from './models/create-task.dto';
 import { UpdateTaskDto } from './models/update-task.dto';
 
@@ -34,10 +35,25 @@ export class TaskService {
    * @returns all task that user with toUserId has to complete
    */
   async getAllUncomplete(toUserId: number) {
-    const allTasks = await Task.find({
-      where: { toUser: toUserId, taskState: TaskState.AWAITING_COMPLETION },
-      relations: ['fromUser'],
-    });
+    const allTasks = await Task.createQueryBuilder('task')
+      .leftJoinAndSelect('task.fromUser', 'fromUser')
+      .where('task.toUser = :toUserId', { toUserId })
+      .andWhere('task.taskState = :state', {
+        state: TaskState.AWAITING_COMPLETION,
+      })
+      .select([
+        'task.id',
+        'task.title',
+        'task.description',
+        'task.taskState',
+        'task.seen',
+        'task.createdAt',
+        'task.updatedAt',
+        'task.id',
+        'fromUser.id',
+        'fromUser.username',
+      ])
+      .getMany();
 
     return allTasks;
   }
@@ -46,10 +62,53 @@ export class TaskService {
    * @returns all task that user with fromUserId has to review
    */
   async getAllForReview(fromUserId: number) {
-    const allTasks = await Task.find({
-      where: { fromUser: fromUserId, taskState: TaskState.AWAITING_REVIEW },
-      relations: ['toUser'],
-    });
+    const allTasks = await Task.createQueryBuilder('task')
+      .leftJoinAndSelect('task.toUser', 'toUser')
+      .where('task.fromUser = :fromUserId', { fromUserId })
+      .andWhere('task.taskState = :state', {
+        state: TaskState.AWAITING_REVIEW,
+      })
+      .select([
+        'task.id',
+        'task.title',
+        'task.description',
+        'task.taskState',
+        'task.seen',
+        'task.createdAt',
+        'task.updatedAt',
+        'task.id',
+        'toUser.id',
+        'toUser.username',
+      ])
+      .getMany();
+
+    return allTasks;
+  }
+
+  async getAllArchived(toUserId: number) {
+    const allTasks = await Task.createQueryBuilder('task')
+      .leftJoinAndSelect('task.fromUser', 'fromUser')
+      .where('task.toUser = :toUserId', { toUserId })
+      .andWhere(
+        'task.taskState = :unfulfilled or task.taskState = :fulfilled',
+        {
+          unfulfilled: TaskState.UNFULFILLED,
+          fulfilled: TaskState.FULFILLED,
+        },
+      )
+      .select([
+        'task.id',
+        'task.title',
+        'task.description',
+        'task.taskState',
+        'task.seen',
+        'task.createdAt',
+        'task.updatedAt',
+        'task.id',
+        'fromUser.id',
+        'fromUser.username',
+      ])
+      .getMany();
 
     return allTasks;
   }
@@ -65,6 +124,10 @@ export class TaskService {
   }
 
   async createTask(task: CreateTaskDto) {
+    if (task.fromUserId === task.toUserId) {
+      throw new BadRequestException("You can't send task to yourself!");
+    }
+
     const newTask = new Task();
     const fromUser = await User.findOne(task.fromUserId, {
       select: ['id', 'username'],
@@ -116,15 +179,40 @@ export class TaskService {
   }
 
   async setForReview(taskId: number) {
-    return await Task.update(taskId, { taskState: TaskState.AWAITING_REVIEW });
+    return await Task.update(taskId, {
+      taskState: TaskState.AWAITING_REVIEW,
+      seen: false,
+    });
   }
 
   async acceptTaskCompletion(taskId: number) {
-    return await Task.update(taskId, { taskState: TaskState.FULFILLED });
+    getConnection().transaction(async (tm) => {
+      const task = await tm.findOne(Task, taskId, {
+        select: ['id', 'taskState', 'toUser'],
+        relations: ['toUser'],
+      });
+      task.taskState = TaskState.FULFILLED;
+      task.seen = false;
+      task.toUser.trustPoints += 10;
+
+      task.toUser.save();
+      task.save();
+    });
   }
 
   async rejectTaskCompletion(taskId: number) {
-    return await Task.update(taskId, { taskState: TaskState.UNFULFILLED });
+    getConnection().transaction(async (tm) => {
+      const task = await tm.findOne(Task, taskId, {
+        select: ['id', 'taskState', 'toUser'],
+        relations: ['toUser'],
+      });
+      task.taskState = TaskState.UNFULFILLED;
+      task.seen = false;
+      task.toUser.trustPoints -= 10;
+
+      task.toUser.save();
+      task.save();
+    });
   }
 
   async deleteTask(taskId: number) {

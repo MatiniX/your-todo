@@ -39,6 +39,11 @@ export class TaskController {
     return this.taskService.getAllForReview(req.session.passport.user.id);
   }
 
+  @Get('archived')
+  getArchivedTasks(@Req() req) {
+    return this.taskService.getAllArchived(req.session.passport.user.id);
+  }
+
   @Get(':id')
   getTask(@Param('id', new ParseIntPipe()) id) {
     return this.taskService.getById(id);
