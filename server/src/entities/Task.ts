@@ -30,9 +30,6 @@ export class Task extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ default: false })
-  seen: boolean;
-
   @Column({
     type: 'enum',
     enum: TaskState,
@@ -40,8 +37,14 @@ export class Task extends BaseEntity {
   })
   taskState: TaskState;
 
+  @Column({ nullable: true })
+  fromUserId: number;
+
   @ManyToOne(() => User, (user) => user.sentTasks)
   fromUser: User;
+
+  @Column({ nullable: true })
+  toUserId: number;
 
   @ManyToOne(() => User, (user) => user.recievedTasks)
   toUser: User;

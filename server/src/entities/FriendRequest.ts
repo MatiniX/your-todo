@@ -20,9 +20,6 @@ export class FriendRequest extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: false })
-  seen: boolean;
-
   @Column({
     type: 'enum',
     enum: FriendRequestState,
@@ -30,8 +27,14 @@ export class FriendRequest extends BaseEntity {
   })
   state: FriendRequestState;
 
+  @Column({ nullable: true })
+  fromUserId: number;
+
   @ManyToOne(() => User, (user) => user.sentFriendRequests)
   fromUser: User;
+
+  @Column({ nullable: true })
+  toUserId: number;
 
   @ManyToOne(() => User, (user) => user.recievedFriendRequests)
   toUser: User;

@@ -1,39 +1,58 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
+import { NotificationService } from 'src/services/notification.service';
 import { UserService } from './user.service';
 
 @UseGuards(LoggedInGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   @Get('details')
   details(@Req() req) {
-    this.userService.findById(req.session.passport.user.id);
+    return this.userService.findById(req.session.passport.user.id);
   }
 
   @Get('notifications')
   getNotifications(@Req() req) {
-    this.userService.getNotifications(req.session.passport.user.id);
+    return this.notificationService.getUserNotifications(
+      req.session.passport.user.id,
+    );
   }
 
   @Get('friend-request/:id')
-  acceptFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
-    return this.userService.acceptFriendRequest(friendRequestId);
+  async acceptFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
+    const friendRequest = await this.userService.acceptFriendRequest(
+      friendRequestId,
+    );
+    return { id: friendRequest.id, newState: friendRequest.state };
+  }
+
+  @Patch('notifications')
+  markSeenNotifications(@Body() ids: number[]) {
+    return this.notificationService.markAsSeen(ids);
   }
 
   @Post('friend-request/:to')
-  sendFriendRequest(@Req() req, @Param('to', new ParseIntPipe()) toUserId) {
+  async sendFriendRequest(
+    @Req() req,
+    @Param('to', new ParseIntPipe()) toUserId,
+  ) {
     const fromUserId = req.session.passport.user.id;
 
     if (fromUserId === toUserId) {
@@ -42,16 +61,27 @@ export class UserController {
       );
     }
 
-    return this.userService.sendFriendRequest(fromUserId, toUserId);
+    const friendRequest = await this.userService.sendFriendRequest(
+      fromUserId,
+      toUserId,
+    );
+
+    return `Friend request sent to ${friendRequest.toUser.username}`;
   }
 
   @Delete('friend-request/:id')
-  rejectFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
-    return this.userService.rejectFriendRequest(friendRequestId);
+  async rejectFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
+    const friendRequest = await this.userService.rejectFriendRequest(
+      friendRequestId,
+    );
+    return { id: friendRequest.id, newState: friendRequest.state };
   }
 
   @Delete('cancel-friendship/:id')
   cancelFriendship(@Req() req, @Param('id', new ParseIntPipe()) friendId) {
-    this.userService.cancelFriendship(req.session.passport.user.id, friendId);
+    return this.userService.cancelFriendship(
+      req.session.passport.user.id,
+      friendId,
+    );
   }
 }

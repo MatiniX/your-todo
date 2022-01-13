@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { FriendRequest } from './FriendRequest';
 import { Task } from './Task';
+import { Notification } from './Notification';
 
 @Entity()
 export class User extends BaseEntity {
@@ -44,6 +45,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Task, (task) => task.toUser)
   recievedTasks: Task[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,12 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Task, TaskState } from 'src/entities/Task';
 import { User } from 'src/entities/User';
+import { NotificationService } from 'src/services/notification.service';
 import { getConnection } from 'typeorm';
 import { CreateTaskDto } from './models/create-task.dto';
 import { UpdateTaskDto } from './models/update-task.dto';
 
 @Injectable()
 export class TaskService {
+  constructor(private readonly notificationService: NotificationService) {}
   /**
    * @returns all tasks that user with toUserId has recieved
    */
@@ -46,7 +48,6 @@ export class TaskService {
         'task.title',
         'task.description',
         'task.taskState',
-        'task.seen',
         'task.createdAt',
         'task.updatedAt',
         'task.id',
@@ -73,7 +74,6 @@ export class TaskService {
         'task.title',
         'task.description',
         'task.taskState',
-        'task.seen',
         'task.createdAt',
         'task.updatedAt',
         'task.id',
@@ -101,7 +101,6 @@ export class TaskService {
         'task.title',
         'task.description',
         'task.taskState',
-        'task.seen',
         'task.createdAt',
         'task.updatedAt',
         'task.id',
@@ -168,7 +167,10 @@ export class TaskService {
       newTask.description = task.description;
     }
 
-    return await newTask.save();
+    await newTask.save();
+    await this.notificationService.newTask(newTask);
+
+    return newTask;
   }
 
   async updateTask(task: UpdateTaskDto) {
@@ -179,40 +181,43 @@ export class TaskService {
   }
 
   async setForReview(taskId: number) {
-    return await Task.update(taskId, {
-      taskState: TaskState.AWAITING_REVIEW,
-      seen: false,
-    });
+    const task = await this.getById(taskId);
+    task.taskState = TaskState.AWAITING_REVIEW;
+
+    task.save();
+    console.log(await this.notificationService.taskReview(task));
   }
 
   async acceptTaskCompletion(taskId: number) {
-    getConnection().transaction(async (tm) => {
+    const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
         select: ['id', 'taskState', 'toUser'],
         relations: ['toUser'],
       });
       task.taskState = TaskState.FULFILLED;
-      task.seen = false;
       task.toUser.trustPoints += 10;
 
       task.toUser.save();
-      task.save();
+      return await task.save();
     });
+
+    console.log(await this.notificationService.taskAccepted(updatedTask));
   }
 
   async rejectTaskCompletion(taskId: number) {
-    getConnection().transaction(async (tm) => {
+    const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
         select: ['id', 'taskState', 'toUser'],
         relations: ['toUser'],
       });
       task.taskState = TaskState.UNFULFILLED;
-      task.seen = false;
       task.toUser.trustPoints -= 10;
 
       task.toUser.save();
-      task.save();
+      return await task.save();
     });
+
+    console.log(await this.notificationService.taskRejected(updatedTask));
   }
 
   async deleteTask(taskId: number) {

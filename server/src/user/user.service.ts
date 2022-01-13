@@ -3,12 +3,12 @@ import { User } from 'src/entities/User';
 import * as argon2 from 'argon2';
 import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
 import { getConnection } from 'typeorm';
-import { NotificationDto, NotificationType } from './models/notification.dto';
-import { request } from 'express';
-import { Task, TaskState } from 'src/entities/Task';
+import { NotificationService } from 'src/services/notification.service';
 
 @Injectable()
 export class UserService {
+  constructor(private readonly notificationService: NotificationService) {}
+
   async createUser(userDetails: { username; email; password }) {
     const newUser = new User();
 
@@ -39,6 +39,7 @@ export class UserService {
         'recievedFriendRequests',
         'sentTasks',
         'recievedTasks',
+        'notifications',
       ],
     });
   }
@@ -80,7 +81,10 @@ export class UserService {
     friendRequest.fromUser = fromUser;
     friendRequest.toUser = toUser;
 
-    return await friendRequest.save();
+    await friendRequest.save();
+    await this.notificationService.newFriendRequest(friendRequest);
+
+    return friendRequest;
   }
 
   async makeFriends(first: number, second: number) {
@@ -101,6 +105,10 @@ export class UserService {
   }
 
   async cancelFriendship(first: number, second: number) {
+    if (first === second) {
+      throw new BadRequestException("You can't unfriend yourself");
+    }
+
     const firstUser = await this.findById(first);
     if (!firstUser) {
       throw new BadRequestException(`User with id: ${first} does not exists`);
@@ -122,6 +130,8 @@ export class UserService {
 
     await firstUser.save();
     await secondUser.save();
+
+    await this.notificationService.friendshipCanceled(firstUser, secondUser);
   }
 
   // Refaktorizovať! Použiť queryBuilder pre lepšie SQL, error checking a handling
@@ -136,17 +146,27 @@ export class UserService {
     await this.makeFriends(friendRequest.fromUser.id, friendRequest.toUser.id);
 
     friendRequest.state = FriendRequestState.ACCEPTED;
-    return await friendRequest.save();
+    await friendRequest.save();
+
+    await this.notificationService.friendRequestAccepted(friendRequest);
+
+    return friendRequest;
   }
 
   async rejectFriendRequest(id: number) {
-    const friendRequest = await FriendRequest.findOne(id);
+    const friendRequest = await FriendRequest.findOne(id, {
+      relations: ['fromUser', 'toUser'],
+    });
     if (!friendRequest) {
       throw new BadRequestException('Friend request does not exists!');
     }
 
     friendRequest.state = FriendRequestState.REJECTED;
-    return await friendRequest.save();
+    await friendRequest.save();
+
+    await this.notificationService.friendRequestRejected(friendRequest);
+
+    return friendRequest;
   }
 
   async areFriends(first: number, second: number) {
@@ -158,124 +178,5 @@ export class UserService {
       [first, second],
     );
     return result.length > 0;
-  }
-
-  // Dokončiť!
-  async getNotifications(userId: number) {
-    const user = await User.findOne(userId, {
-      relations: [
-        'sentFriendRequests',
-        'recievedFriendRequests',
-        'sentTasks',
-        'recievedTasks',
-      ],
-    });
-
-    // prettier-ignore
-    const friendRequestNotifications = await this.getFriendRequestNotifications(user);
-    const taskNotifications = await this.getTaskNotifications(user);
-  }
-
-  getTaskNotifications(user: User) {
-    const sentTasks = user.sentTasks.filter(
-      (task) =>
-        task.seen === false && task.taskState === TaskState.AWAITING_REVIEW,
-    );
-
-    const recievedTasks = user.recievedTasks.filter(
-      (task) =>
-        task.seen === false &&
-        (task.taskState === TaskState.AWAITING_COMPLETION ||
-          task.taskState === TaskState.FULFILLED ||
-          task.taskState === TaskState.UNFULFILLED),
-    );
-
-    return this.createTaskNotifications(sentTasks, recievedTasks);
-  }
-
-  /**
-   * Zmapuje tasky na vhodné notifikácie
-   */
-  createTaskNotifications(sentTasks: Task[], recievedTasks: Task[]) {
-    const sentNotification = sentTasks.map((task) => {
-      const notifiaction = new NotificationDto();
-      notifiaction.type = NotificationType.TASK_COMPLETED;
-      notifiaction.message = 'User claims to complete given task';
-      notifiaction.date = task.updatedAt;
-      return notifiaction;
-    });
-
-    const recievedNotifications = recievedTasks.map((task) => {
-      const notifiaction = new NotificationDto();
-      if (task.taskState === TaskState.AWAITING_COMPLETION) {
-        notifiaction.type = NotificationType.NEW_TASK;
-        notifiaction.message = 'You have a new task!';
-        notifiaction.date = task.createdAt;
-      } else if (task.taskState === TaskState.FULFILLED) {
-        notifiaction.type = NotificationType.TASK_ACCEPTED;
-        notifiaction.message = 'Your task was accepted!';
-        notifiaction.date = task.updatedAt;
-      } else {
-        notifiaction.type = NotificationType.TASK_REJECTED;
-        notifiaction.message = 'Your task was rejected!';
-        notifiaction.date = task.updatedAt;
-      }
-      return notifiaction;
-    });
-
-    return [...sentNotification, ...recievedNotifications];
-  }
-
-  getFriendRequestNotifications(user: User) {
-    // všetky friend requesty, ktoré úžívateľ poslal, a ktoré zmenili state a uživateľ ich ešte nevidel
-    const sentRequests = user.sentFriendRequests.filter(
-      (request) =>
-        request.seen === false &&
-        (request.state === FriendRequestState.ACCEPTED ||
-          request.state === FriendRequestState.REJECTED),
-    );
-
-    // všetky nové friend requesty
-    const recievedRequests = user.recievedFriendRequests.filter(
-      (request) =>
-        request.seen === false && request.state === FriendRequestState.PENDING,
-    );
-
-    return this.createFriendRequestNotifications(
-      sentRequests,
-      recievedRequests,
-    );
-  }
-
-  /**
-   * Zmapuje friend requesty na vhodné notifikácie
-   */
-  createFriendRequestNotifications(
-    sentRequests: FriendRequest[],
-    recievedRequests: FriendRequest[],
-  ) {
-    const sentNotifications = sentRequests.map((request) => {
-      const notification = new NotificationDto();
-      if ((request.state = FriendRequestState.ACCEPTED)) {
-        notification.type = NotificationType.FRIEND_REQUEST_ACCEPTED;
-        notification.message = 'Friend reuqest was accepted';
-        notification.date = request.updatedAt;
-      } else {
-        notification.type = NotificationType.FRIEND_REQUEST_REJECTED;
-        notification.message = 'Friend reuqest was rejected';
-        notification.date = request.updatedAt;
-      }
-      return notification;
-    });
-
-    const recievedNotifications = recievedRequests.map((request) => {
-      const notification = new NotificationDto();
-      notification.type = NotificationType.NEW_FRIEND_REQUEST;
-      notification.message = 'You have new friend request!';
-      notification.date = request.createdAt;
-      return notification;
-    });
-
-    return [...sentNotifications, ...recievedNotifications];
   }
 }

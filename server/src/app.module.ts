@@ -14,6 +14,7 @@ import { AuthController } from './auth/auth.controller';
 import { FriendRequest } from './entities/FriendRequest';
 import { Task } from './entities/Task';
 import { TaskModule } from './task/task.module';
+import { Notification } from './entities/Notification';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { TaskModule } from './task/task.module';
       username: 'postgres',
       password: 'postgres',
       database: 'your-todo-dev',
-      entities: [User, FriendRequest, Task],
+      entities: [User, FriendRequest, Task, Notification],
       synchronize: true,
       logging: true,
     }),
