@@ -7,9 +7,10 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { LocalGuard } from 'src/guards/local.guard';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { AuthService } from './auth.service';
@@ -51,8 +52,12 @@ export class AuthController {
 
   @UseGuards(LoggedInGuard)
   @Get('logout')
-  logout(@Req() req) {
+  logout(@Req() req, @Res() res: Response) {
+    // Odhlasi uživateľa, vymaže session cookie a zruší session medzi serverom a uživateľom
     req.logout();
-    return true;
+    res.status(200).clearCookie('connect.sid');
+    req.session.destroy();
+
+    res.send(true);
   }
 }

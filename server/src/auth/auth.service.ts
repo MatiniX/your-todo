@@ -16,6 +16,10 @@ import { sendEmail } from 'src/utils/sendEmail';
 import { validateEmail } from 'src/utils/validateEmail';
 import { validatePassword } from 'src/utils/validatePassword';
 
+class FieldError {
+  constructor(public field: string, public message: string) {}
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,15 +33,19 @@ export class AuthService {
       (await this.userService.findByUsername(user.usernameOrEmail));
 
     if (!foundUser) {
-      throw new BadRequestException('Account doesnt exists!');
+      throw new BadRequestException(
+        new FieldError('usernameOrEmail', 'Account doesnt exists!'),
+      );
     }
     const comparePasswords = await argon2.verify(
       foundUser.password,
       user.password,
     );
 
-    if (!foundUser || !comparePasswords) {
-      throw new UnauthorizedException('Incorrect username or password!');
+    if (!comparePasswords) {
+      throw new UnauthorizedException(
+        new FieldError('password', 'Incorrect password!'),
+      );
     }
 
     const { password: _, ...retUser } = foundUser;
@@ -47,34 +55,48 @@ export class AuthService {
   async registerUser(user: RegisterUserDto) {
     let existingUser = await this.userService.findByEmail(user.email);
     if (existingUser) {
-      throw new BadRequestException('Email already in use!');
+      throw new BadRequestException(
+        new FieldError('email', 'Email already in use.'),
+      );
     }
     existingUser = await this.userService.findByUsername(user.username);
     if (existingUser) {
-      throw new BadRequestException('Username already taken');
+      throw new BadRequestException(
+        new FieldError('username', 'Username already taken.'),
+      );
     }
 
     if (user.username.length < 3) {
       throw new BadRequestException(
-        'Username must be at least 3 charachters long!',
+        new FieldError(
+          'username',
+          'Username must be at least 3 charachters long!',
+        ),
       );
     }
     if (user.username.includes('@')) {
-      throw new BadRequestException('Username can not contain @ symbol');
+      throw new BadRequestException(
+        new FieldError('username', 'Username can not contain @ symbol'),
+      );
     }
     if (!validateEmail(user.email)) {
-      throw new BadRequestException('Email is invalid!');
+      throw new BadRequestException(
+        new FieldError('email', 'Email is invalid!'),
+      );
     }
 
     validatePassword(user.password);
 
-    if (user.password !== user.confirmationPassword) {
+    if (user.password !== user.confirmPassword) {
       throw new BadRequestException(
-        'Password does not match confirmation password',
+        new FieldError(
+          'password',
+          'Password does not match confirmation password',
+        ),
       );
     }
 
-    const { confirmationPassword: _, ...userDetails } = user;
+    const { confirmPassword: _, ...userDetails } = user;
     const newUser = await this.userService.createUser(userDetails);
 
     return newUser;
@@ -93,7 +115,10 @@ export class AuthService {
       'ex',
       1000 * 60 * 60 * 24,
     );
-    await sendEmail(email, `<h1>${token}</h1>`);
+    await sendEmail(
+      email,
+      `<p>Click <a href=http://localhost:3000/change-password/${token}>here</a> to change your password.</p>`,
+    );
     return true;
   }
 

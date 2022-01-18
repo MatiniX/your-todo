@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Formik, Form } from "formik";
 import NextLink from "next/link";
+import * as Yup from "yup";
 import InputField from "../components/InputField";
 import useUser from "../data/useUser";
 import Router from "next/router";
 import { login } from "../utils/auth";
+import axios from "axios";
 
 const Login = () => {
   const { user, loggedOut, mutate } = useUser();
@@ -19,10 +21,22 @@ const Login = () => {
     <main className="py-12 px-6 lg:px-8 min-h-screen bg-gray-50 flex flex-col justify-center">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
-        onSubmit={async (values, { setSubmitting }) => {
-          await login(values.usernameOrEmail, values.password);
-          mutate();
-          setSubmitting(false);
+        validationSchema={Yup.object({
+          usernameOrEmail: Yup.string().required("Provide email or username"),
+          password: Yup.string().required("Required"),
+        })}
+        onSubmit={async (values, { setSubmitting, setErrors }) => {
+          try {
+            await login(values.usernameOrEmail, values.password);
+            mutate();
+            setSubmitting(false);
+          } catch (error) {
+            if (axios.isAxiosError(error)) {
+              const { field, message } = error.response?.data;
+              console.log({ field, message });
+              setErrors({ [field]: message });
+            }
+          }
         }}
       >
         {(formik) => (
@@ -50,7 +64,7 @@ const Login = () => {
                     disabled={formik.isSubmitting}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Log In
+                    {formik.isSubmitting ? "Logging in..." : "Log In"}
                   </button>
                   <div className="w-full border-b-2"></div>
                   <NextLink href="forgot-password">

@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NextLink from "next/link";
 import { Formik, Form } from "formik";
 import InputField from "../components/InputField";
 import * as Yup from "yup";
+import { login, register } from "../utils/auth";
+import Router from "next/router";
+import axios from "axios";
+import useUser from "../data/useUser";
 
 const Register = () => {
+  const { user, loggedOut, mutate } = useUser();
+
+  useEffect(() => {
+    if (user && !loggedOut) {
+      Router.replace("/");
+    }
+  }, [user, loggedOut]);
+
   return (
     <main className="py-8 px-6 lg:px-8 min-h-screen bg-gray-50 flex flex-col justify-center">
       <Formik
@@ -19,11 +31,21 @@ const Register = () => {
             .matches(/[0-9]/, "Password must contain numbers."),
           confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit={async (values, { setSubmitting, setErrors }) => {
+          try {
+            // Prihlási používateľa po registrácii
+            const { password, username } = await register(values);
+            await login(username, password);
+            mutate();
             setSubmitting(false);
-          }, 400);
+            Router.replace("/");
+          } catch (error) {
+            // Ak nastane chyba pri registrácii nastaví chybové správy na konkrétne polia
+            if (axios.isAxiosError(error)) {
+              const { field, message } = error.response?.data;
+              setErrors({ [field]: message });
+            }
+          }
         }}
       >
         {(formik) => (
@@ -53,7 +75,7 @@ const Register = () => {
                     disabled={formik.isSubmitting}
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Register
+                    {formik.isSubmitting ? "Registering..." : "Register"}
                   </button>
                 </Form>
               </div>

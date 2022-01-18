@@ -2,5 +2,5 @@ export class RegisterUserDto {
   username: string;
   email: string;
   password: string;
-  confirmationPassword: string;
+  confirmPassword: string;
 }
