@@ -50,7 +50,10 @@ export class TaskController {
   }
 
   @Post('create')
-  createTask(@Body() task: CreateTaskDto) {
+  createTask(@Req() req, @Body() task: CreateTaskDto) {
+    const fromUserId = req.session.passport.user.id;
+    task.fromUserId = fromUserId;
+
     const areFriends = this.userService.areFriends(
       task.fromUserId,
       task.toUserId,

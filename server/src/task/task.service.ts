@@ -146,7 +146,7 @@ export class TaskService {
     }
 
     const existingTask = await Task.findOne({
-      where: { toUser: toUser.id, fromUser: fromUser.id },
+      where: { toUserId: toUser.id, fromUserId: fromUser.id },
     });
     if (existingTask) {
       // prettier-ignore

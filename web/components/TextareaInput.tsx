@@ -1,13 +1,13 @@
 import React, { InputHTMLAttributes } from "react";
 import { useField } from "formik";
 
-type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+type TexareaInputProps = InputHTMLAttributes<HTMLTextAreaElement> & {
   name: string;
   label: string;
   largeLabel?: boolean;
 };
 
-const InputField = ({ label, largeLabel = false, ...props }: InputFieldProps) => {
+const TexareaInput = ({ label, largeLabel = false, ...props }: TexareaInputProps) => {
   const [field, meta] = useField(props);
   return (
     <div>
@@ -22,7 +22,7 @@ const InputField = ({ label, largeLabel = false, ...props }: InputFieldProps) =>
         {label}
       </label>
       <div className="mt-1">
-        <input {...field} {...props} />
+        <textarea {...field} {...props} rows={8} />
         {meta.touched && meta.error ? (
           <div className="mt-1 text-sm text-red-400">{meta.error}</div>
         ) : null}
@@ -31,4 +31,4 @@ const InputField = ({ label, largeLabel = false, ...props }: InputFieldProps) =>
   );
 };
 
-export default InputField;
+export default TexareaInput;
