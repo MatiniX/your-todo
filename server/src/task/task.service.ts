@@ -14,7 +14,7 @@ export class TaskService {
    */
   async getAllRecieved(toUserId: number) {
     const allTasks = await Task.find({
-      where: { toUser: toUserId },
+      where: { toUserId: toUserId },
       relations: ['fromUser'],
     });
 
@@ -145,20 +145,21 @@ export class TaskService {
       );
     }
 
-    const existingTask = await Task.findOne({
-      where: { toUserId: toUser.id, fromUserId: fromUser.id },
-    });
-    if (existingTask) {
-      // prettier-ignore
-      const existingTaskCreateDate = existingTask.createdAt.setHours(0, 0, 0, 0);
-      const newTaskCreateDate = new Date().setHours(0, 0, 0, 0);
+    // ODKOMENTOVAŤ
+    // const existingTask = await Task.findOne({
+    //   where: { toUserId: toUser.id, fromUserId: fromUser.id },
+    // });
+    // if (existingTask) {
+    //   // prettier-ignore
+    //   const existingTaskCreateDate = existingTask.createdAt.setHours(0, 0, 0, 0);
+    //   const newTaskCreateDate = new Date().setHours(0, 0, 0, 0);
 
-      if (existingTaskCreateDate === newTaskCreateDate) {
-        throw new BadRequestException(
-          'You only set one task per day for your friend ;)',
-        );
-      }
-    }
+    //   if (existingTaskCreateDate === newTaskCreateDate) {
+    //     throw new BadRequestException(
+    //       'You only set one task per day for your friend ;)',
+    //     );
+    //   }
+    // }
 
     newTask.title = task.title;
     newTask.fromUser = fromUser;

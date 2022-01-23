@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Form, Formik } from "formik";
 import React, { ReactElement, useEffect, useState } from "react";
+import ErrorDialog from "../components/ErrorDialog";
 import InfoDialog from "../components/InfoDialog";
 import InputField from "../components/InputField";
 import Layout from "../components/Layout";
@@ -13,19 +14,23 @@ const CreateTask = () => {
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogText, setDialogText] = useState("");
   const [dialogCloseMessage, setdialogCloseMessage] = useState("");
+  const [errorDialog, setErrorDialog] = useState(false);
 
   return (
-    <main className="pl-8 pt-4 h-content bg-gray-50 ">
-      <h1 className="font-bold text-4xl text-gray-600">Create Task</h1>
+    <>
+      <h1 className="page-header">Create Task</h1>
       <Formik
         initialValues={{ title: "", description: "", to: -1 }}
         onSubmit={async (values, actions) => {
+          setErrorDialog(false);
           try {
-            const toUsesr = await createTask(values);
+            const toUser = await createTask(values);
             setDialogTitle("Task sent!");
-            setDialogText("You have sent a new task to " + toUsesr);
+            setDialogText("You have sent a new task to " + toUser);
+            actions.resetForm();
           } catch (error) {
             if (axios.isAxiosError(error)) {
+              setErrorDialog(true);
               setDialogTitle("There was an error!");
               setDialogText(error.response?.data.message);
             }
@@ -60,14 +65,24 @@ const CreateTask = () => {
           </Form>
         )}
       </Formik>
-      <InfoDialog
-        title={dialogTitle}
-        text={dialogText}
-        closeMessage={dialogCloseMessage}
-        open={dialogOpen}
-        setIsOpen={setDialogOpen}
-      />
-    </main>
+      {errorDialog ? (
+        <ErrorDialog
+          title={dialogTitle}
+          text={dialogText}
+          closeMessage={dialogCloseMessage}
+          open={dialogOpen}
+          setIsOpen={setDialogOpen}
+        />
+      ) : (
+        <InfoDialog
+          title={dialogTitle}
+          text={dialogText}
+          closeMessage={dialogCloseMessage}
+          open={dialogOpen}
+          setIsOpen={setDialogOpen}
+        />
+      )}
+    </>
   );
 };
 

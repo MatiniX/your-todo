@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
           <Sidebar />
           <div className="ml-72 w-full">
             <TopNav />
-            {children}
+            <main className="pl-8 pt-4 h-content bg-gray-50 ">{children}</main>
           </div>
         </>
       )}

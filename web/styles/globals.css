@@ -31,3 +31,9 @@
     height: calc(100vh - 4rem);
   }
 }
+
+@layer components {
+  .page-header {
+    @apply font-bold text-4xl text-gray-600;
+  }
+}

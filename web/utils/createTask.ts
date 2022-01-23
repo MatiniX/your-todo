@@ -8,7 +8,7 @@ interface Task {
 
 const createTask = async (task: Task) => {
   try {
-    const response = await axiosInstance.post("task/create", task);
+    const response = await axiosInstance.post("task/create", { toUserId: task.to, ...task });
     return response.data.toUser.username;
   } catch (error) {
     throw error;
