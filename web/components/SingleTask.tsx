@@ -5,10 +5,27 @@ interface SingleTaskProps {
   id: number;
   title: string;
   fromUser: string;
-  description?: string;
+  setCurrentTaskTitle: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentTaskDescritpion: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentTaskAuthor: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentTaskId: React.Dispatch<React.SetStateAction<number>>;
+  setDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  description: string | null;
 }
 
-const SingleTask = ({ id, title, fromUser, description }: SingleTaskProps) => {
+const SingleTask = ({
+  id,
+  title,
+  fromUser,
+  description,
+  setCurrentTaskTitle,
+  setCurrentTaskDescritpion,
+  setCurrentTaskId,
+  setCurrentTaskAuthor,
+  setDetailsOpen,
+  setAlertOpen,
+}: SingleTaskProps) => {
   return (
     <div className="pt-2 w-96 bg-white rounded shadow ">
       <div className="divide-y">
@@ -18,11 +35,27 @@ const SingleTask = ({ id, title, fromUser, description }: SingleTaskProps) => {
         </div>
 
         <div className="flex divide-x text-gray-400">
-          <button className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-sky-100 hover:text-sky-600">
+          <button
+            className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-sky-100 hover:text-sky-600"
+            onClick={() => {
+              setCurrentTaskTitle(title);
+              setCurrentTaskAuthor(fromUser);
+              setCurrentTaskDescritpion(description);
+              setDetailsOpen(true);
+            }}
+          >
             <InformationCircleIcon className="h-6" />
             <p>Details</p>
           </button>
-          <button className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-green-100 hover:text-green-600">
+          <button
+            className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-green-100 hover:text-green-600"
+            onClick={() => {
+              setCurrentTaskTitle(title);
+              setCurrentTaskAuthor(fromUser);
+              setCurrentTaskId(id);
+              setAlertOpen(true);
+            }}
+          >
             <BadgeCheckIcon className="h-6" />
             <p>Complete</p>
           </button>

@@ -1,191 +1,73 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
+import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import Layout from "../components/Layout";
 import SingleTask from "../components/SingleTask";
-
-const allTasks = [
-  {
-    date: new Date(2020, 1, 23),
-    tasks: [
-      {
-        id: 29,
-        title: "Task od joza pre mata",
-        description: null,
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:26:43.773Z",
-        updatedAt: "2022-01-23T07:26:43.773Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 30,
-        title: "Task od joza pre mata",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 31,
-        title: "Task od joza pre mata s dlhym title",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 31,
-        title: "Task od joza pre mata s dlhym title",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-    ],
-  },
-  {
-    date: new Date(2020, 1, 22),
-    tasks: [
-      {
-        id: 29,
-        title: "Task od joza pre mata",
-        description: null,
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:26:43.773Z",
-        updatedAt: "2022-01-23T07:26:43.773Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 30,
-        title: "Task od joza pre mata",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 31,
-        title: "Task od joza pre mata s dlhym title",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-      {
-        id: 31,
-        title: "Task od joza pre mata s dlhym title",
-        description: "tu aj nejaky daky ten desrciption",
-        taskState: "awaiting",
-        fromUserId: 2,
-        toUserId: 1,
-        createdAt: "2022-01-23T07:28:31.321Z",
-        updatedAt: "2022-01-23T07:28:31.321Z",
-        fromUser: {
-          id: 2,
-          username: "jozo",
-          email: "test@test.com",
-          trustPoints: 30,
-          createdAt: "2022-01-08T13:54:40.643Z",
-          updatedAt: "2022-01-13T15:40:54.318Z",
-        },
-      },
-    ],
-  },
-];
+import TaskDetailsModal from "../components/TaskDetailsModal";
+import useTasks from "../data/useTasks";
 
 const Tasks = () => {
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [currentTaskId, setCurrentTaskId] = useState(-1);
+  const [currentTaskTitle, setCurrentTaskTitle] = useState("");
+  const [currentTaskDescription, setCurrentTaskDescription] = useState<string | null>("");
+  const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
+  const [completeTaskAlerOpen, setCompleteTaskAlerOpen] = useState(false);
+
+  const { allTasks, loading, error, mutate } = useTasks();
+
   return (
     <>
-      <h1 className="page-header">Your Tasks</h1>
-      <div className="divide-y-2 pr-4">
-        {allTasks.map((dailyTasks, idx) => {
-          const { date, tasks } = dailyTasks;
-          console.log(date);
-          return (
-            <div className="mb-2">
-              <h2 className="my-2 text-lg font-medium text-gray-500">
-                {date.toLocaleDateString()}
-              </h2>
-              <div className="flex flex-wrap gap-4">
-                {tasks.map((task, idx) => (
-                  <SingleTask
-                    key={idx}
-                    id={task.id}
-                    title={task.title}
-                    fromUser={task.fromUser.username}
-                  />
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {loading ? (
+        <h1>loading...</h1>
+      ) : (
+        <>
+          <h1 className="page-header">Your Tasks</h1>
+          <div className="divide-y-2 pr-4">
+            {allTasks!.map((dailyTasks, idx) => {
+              const { date, tasks } = dailyTasks;
+              console.log(date);
+              return (
+                <div className="mb-2" key={idx}>
+                  <h2 className="my-2 text-lg font-medium text-gray-500">{date}</h2>
+                  <div className="flex flex-wrap gap-4">
+                    {tasks.map((task, idx) => (
+                      <SingleTask
+                        key={idx}
+                        id={task.id}
+                        title={task.title}
+                        fromUser={task.fromUser.username}
+                        description={task.description}
+                        setDetailsOpen={setDetailsOpen}
+                        setCurrentTaskAuthor={setCurrentTaskAuthor}
+                        setCurrentTaskDescritpion={setCurrentTaskDescription}
+                        setCurrentTaskTitle={setCurrentTaskTitle}
+                        setAlertOpen={setCompleteTaskAlerOpen}
+                        setCurrentTaskId={setCurrentTaskId}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <TaskDetailsModal
+            id={currentTaskId}
+            title={currentTaskTitle}
+            fromUser={currentTaskAuthor}
+            description={currentTaskDescription}
+            isOpen={detailsOpen}
+            setIsOpen={setDetailsOpen}
+          />
+          <CompleteTaskAlert
+            isOpen={completeTaskAlerOpen}
+            setIsOpen={setCompleteTaskAlerOpen}
+            taskTitle={currentTaskTitle}
+            fromUser={currentTaskAuthor}
+            taskId={currentTaskId}
+            mutate={mutate}
+          />
+        </>
+      )}
     </>
   );
 };

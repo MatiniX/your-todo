@@ -56,7 +56,35 @@ export class TaskService {
       ])
       .getMany();
 
-    return allTasks;
+    // Vytvorí set dátumov vo formate "dd.mm.yyyy"
+    const allDates = new Set(
+      allTasks.map((task) =>
+        task.createdAt.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+        }),
+      ),
+    );
+
+    // Priradí denné tasky ku každému dňu na základe dátumu vytvorenia
+    const retTask = [];
+    allDates.forEach((date) => {
+      const dailyTasks = {
+        date,
+        tasks: allTasks.filter(
+          (task) =>
+            task.createdAt.toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+            }) === date,
+        ),
+      };
+      retTask.push(dailyTasks);
+    });
+
+    return retTask;
   }
 
   /**
@@ -186,7 +214,7 @@ export class TaskService {
     task.taskState = TaskState.AWAITING_REVIEW;
 
     task.save();
-    console.log(await this.notificationService.taskReview(task));
+    this.notificationService.taskReview(task);
   }
 
   async acceptTaskCompletion(taskId: number) {
