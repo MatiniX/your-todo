@@ -221,7 +221,7 @@ export class TaskService {
     const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
         select: ['id', 'taskState', 'toUser'],
-        relations: ['toUser'],
+        relations: ['toUser', 'fromUser'],
       });
       task.taskState = TaskState.FULFILLED;
       task.toUser.trustPoints += 10;
@@ -230,14 +230,14 @@ export class TaskService {
       return await task.save();
     });
 
-    console.log(await this.notificationService.taskAccepted(updatedTask));
+    await this.notificationService.taskAccepted(updatedTask);
   }
 
   async rejectTaskCompletion(taskId: number) {
     const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
         select: ['id', 'taskState', 'toUser'],
-        relations: ['toUser'],
+        relations: ['toUser', 'fromUser'],
       });
       task.taskState = TaskState.UNFULFILLED;
       task.toUser.trustPoints -= 10;
@@ -246,7 +246,7 @@ export class TaskService {
       return await task.save();
     });
 
-    console.log(await this.notificationService.taskRejected(updatedTask));
+    await this.notificationService.taskRejected(updatedTask);
   }
 
   async deleteTask(taskId: number) {

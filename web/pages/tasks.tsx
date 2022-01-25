@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import Layout from "../components/Layout";
 import SingleTask from "../components/SingleTask";
@@ -11,7 +11,7 @@ const Tasks = () => {
   const [currentTaskTitle, setCurrentTaskTitle] = useState("");
   const [currentTaskDescription, setCurrentTaskDescription] = useState<string | null>("");
   const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
-  const [completeTaskAlerOpen, setCompleteTaskAlerOpen] = useState(false);
+  const [completeTaskAlertOpen, setCompleteTaskAlertOpen] = useState(false);
 
   const { allTasks, loading, error, mutate } = useTasks();
 
@@ -41,7 +41,7 @@ const Tasks = () => {
                         setCurrentTaskAuthor={setCurrentTaskAuthor}
                         setCurrentTaskDescritpion={setCurrentTaskDescription}
                         setCurrentTaskTitle={setCurrentTaskTitle}
-                        setAlertOpen={setCompleteTaskAlerOpen}
+                        setAlertOpen={setCompleteTaskAlertOpen}
                         setCurrentTaskId={setCurrentTaskId}
                       />
                     ))}
@@ -59,8 +59,8 @@ const Tasks = () => {
             setIsOpen={setDetailsOpen}
           />
           <CompleteTaskAlert
-            isOpen={completeTaskAlerOpen}
-            setIsOpen={setCompleteTaskAlerOpen}
+            isOpen={completeTaskAlertOpen}
+            setIsOpen={setCompleteTaskAlertOpen}
             taskTitle={currentTaskTitle}
             fromUser={currentTaskAuthor}
             taskId={currentTaskId}
