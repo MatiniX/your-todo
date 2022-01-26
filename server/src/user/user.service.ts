@@ -63,6 +63,10 @@ export class UserService {
     await User.update({ id }, { password: hashedPassword });
   }
 
+  async getFriends(userId: number) {
+    return User.getFriends(userId);
+  }
+
   /**
    * Friend requests
    */

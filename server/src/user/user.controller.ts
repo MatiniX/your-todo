@@ -11,6 +11,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { User } from 'src/entities/User';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { NotificationService } from 'src/services/notification.service';
 import { UserService } from './user.service';
@@ -33,6 +34,11 @@ export class UserController {
     return this.notificationService.getUserNotifications(
       req.session.passport.user.id,
     );
+  }
+
+  @Get('friends')
+  getFriends(@Req() req) {
+    return this.userService.getFriends(req.session.passport.user.id);
   }
 
   @Get('friend-request/:id')
