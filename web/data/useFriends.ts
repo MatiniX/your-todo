@@ -3,18 +3,24 @@ import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
 import { User } from "./useUser";
 
+interface Friend {
+  id: number;
+  username: string;
+  trustPoints: number;
+}
+
 const useFriends = () => {
-  const { data, error, mutate } = useSWR<User[], AxiosError>("user/friends", async () => {
+  const { data, error, mutate } = useSWR<Friend[], AxiosError>("user/friends", async () => {
     try {
-      const response = await axiosInstance.get("user/details");
-      return response.data.friends;
+      const response = await axiosInstance.get("user/friends");
+      return response.data;
     } catch (error) {
       throw error;
     }
   });
   const loading = !data && !error;
 
-  return { friends: data, loading, mutate };
+  return { friends: data, loading, mutate, error };
 };
 
 export default useFriends;

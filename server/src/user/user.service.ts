@@ -4,6 +4,7 @@ import * as argon2 from 'argon2';
 import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
 import { getConnection } from 'typeorm';
 import { NotificationService } from 'src/services/notification.service';
+import { Task } from 'src/entities/Task';
 
 @Injectable()
 export class UserService {
@@ -65,6 +66,33 @@ export class UserService {
 
   async getFriends(userId: number) {
     return User.getFriends(userId);
+  }
+
+  async getFriendDetails(friendId: number) {
+    const friend = await User.findOne(friendId, {
+      select: [
+        'username',
+        'trustPoints',
+        'recievedTasks',
+        'sentTasks',
+        'createdAt',
+      ],
+    });
+
+    const tasksSent = await Task.createQueryBuilder('task')
+      .where('task.fromUserId = :friendId', { friendId })
+      .getCount();
+    const tasksRecieved = await Task.createQueryBuilder('task')
+      .where('task.toUserId = :friendId', { friendId })
+      .getCount();
+
+    return {
+      username: friend.username,
+      trustPoints: friend.trustPoints,
+      memberSince: friend.createdAt,
+      tasksSent,
+      tasksRecieved,
+    };
   }
 
   /**

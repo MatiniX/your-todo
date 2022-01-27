@@ -60,7 +60,7 @@ export class User extends BaseEntity {
     // custom sql query ktorá vráti list priateľov len s id a username
     const friends: User[] = await getConnection().query(
       `
-    select "friend"."id" as "id", "friend"."username" as "username" from "user" 
+    select "friend"."id" as "id", "friend"."username" as "username", "friend"."trustPoints" as "trustPoints" from "user"
     left join "user_friends_user" on "user_friends_user"."userId_1"="user"."id"
     left join "user" "friend" on "friend"."id"="user_friends_user"."userId_2"
     where "user"."id"=$1`,
