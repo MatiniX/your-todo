@@ -11,8 +11,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { identity } from 'rxjs';
-import { User } from 'src/entities/User';
 import { LoggedInGuard } from 'src/guards/logged-in.guard';
 import { NotificationService } from 'src/services/notification.service';
 import { UserService } from './user.service';
@@ -27,7 +25,7 @@ export class UserController {
 
   @Get('details')
   details(@Req() req) {
-    return this.userService.findById(req.session.passport.user.id);
+    return this.userService.findByIdFull(req.session.passport.user.id);
   }
 
   @Get('notifications')
@@ -61,13 +59,14 @@ export class UserController {
   }
 
   @Post('friend-request/:to')
-  async sendFriendRequest(
-    @Req() req,
-    @Param('to', new ParseIntPipe()) toUserId,
-  ) {
+  async sendFriendRequest(@Req() req, @Param('to') toUsername) {
     const fromUserId = req.session.passport.user.id;
+    const toUser = await this.userService.findByUsername(toUsername);
+    if (!toUser) {
+      throw new BadRequestException(`User ${toUsername} does not exists!`);
+    }
 
-    if (fromUserId === toUserId) {
+    if (fromUserId === toUser.id) {
       throw new BadRequestException(
         'You can not send friend request to yourself!',
       );
@@ -75,7 +74,7 @@ export class UserController {
 
     const friendRequest = await this.userService.sendFriendRequest(
       fromUserId,
-      toUserId,
+      toUser.id,
     );
 
     return `Friend request sent to ${friendRequest.toUser.username}`;

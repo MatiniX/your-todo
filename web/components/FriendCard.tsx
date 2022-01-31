@@ -5,7 +5,7 @@ interface FriendCardProps {
   id: number;
   username: string;
   trustPoints: number;
-  setFriendDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFriendDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setFriendId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
@@ -13,15 +13,15 @@ const FriendCard = ({
   username,
   id,
   trustPoints,
-  setFriendDetailsOpen,
   setFriendId,
+  setFriendDetailOpen,
 }: FriendCardProps) => {
   return (
     <div
       className="px-4 py-3 w-64 bg-white rounded-md shadow cursor-pointer hover:scale-105 transition"
       onClick={() => {
         setFriendId(id);
-        setFriendDetailsOpen(true);
+        setFriendDetailOpen(true);
       }}
     >
       <div className="flex items-center mb-2 text-gray-800 ">

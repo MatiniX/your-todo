@@ -32,7 +32,7 @@ export class UserService {
    * @returns
    * Navráti PLNE hydratovanú User entitu!
    */
-  async findById(id: number) {
+  async findByIdFull(id: number) {
     return await User.findOne(id, {
       relations: [
         'friends',
@@ -42,6 +42,12 @@ export class UserService {
         'recievedTasks',
         'notifications',
       ],
+    });
+  }
+
+  async findById(id: number) {
+    return await User.findOne(id, {
+      select: ['id', 'username', 'password', 'email'],
     });
   }
 
@@ -70,13 +76,7 @@ export class UserService {
 
   async getFriendDetails(friendId: number) {
     const friend = await User.findOne(friendId, {
-      select: [
-        'username',
-        'trustPoints',
-        'recievedTasks',
-        'sentTasks',
-        'createdAt',
-      ],
+      select: ['username', 'trustPoints', 'createdAt'],
     });
 
     const tasksSent = await Task.createQueryBuilder('task')
@@ -120,11 +120,11 @@ export class UserService {
   }
 
   async makeFriends(first: number, second: number) {
-    const firstUser = await this.findById(first);
+    const firstUser = await this.findByIdFull(first);
     if (!firstUser) {
       throw new BadRequestException(`User with id: ${first} does not exists`);
     }
-    const secondUser = await this.findById(second);
+    const secondUser = await this.findByIdFull(second);
     if (!secondUser) {
       throw new BadRequestException(`User with id: ${second} does not exists`);
     }
@@ -141,11 +141,11 @@ export class UserService {
       throw new BadRequestException("You can't unfriend yourself");
     }
 
-    const firstUser = await this.findById(first);
+    const firstUser = await this.findByIdFull(first);
     if (!firstUser) {
       throw new BadRequestException(`User with id: ${first} does not exists`);
     }
-    const secondUser = await this.findById(second);
+    const secondUser = await this.findByIdFull(second);
     if (!secondUser) {
       throw new BadRequestException(`User with id: ${second} does not exists`);
     }

@@ -1,7 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import useFriendDetails from "../data/useFriendDetails";
+import { removeFriend } from "../utils/friendsUtils";
 
 interface FriendDetailsProps {
   id: number;
@@ -11,6 +12,10 @@ interface FriendDetailsProps {
 
 const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
   const { friendDetails, error, loading, mutate } = useFriendDetails(id);
+
+  useEffect(() => {
+    mutate();
+  }, [id]);
 
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -51,7 +56,7 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
               <div className="mb-2">
                 <h2 className="text-lg font-medium text-gray-500">Username:</h2>
                 <Dialog.Title className="text-2xl font-bold text-gray-800">
-                  {loading ? "loading..." : friendDetails?.username}
+                  {loading || error ? "loading..." : friendDetails?.username}
                 </Dialog.Title>
               </div>
               <span className="border-b-2 border-gray-300"></span>
@@ -59,13 +64,13 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
                 <div>
                   <h3 className="text-gray-500 text-lg">Trust Points:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {loading ? "loading..." : friendDetails?.trustPoints}
+                    {loading || error ? "loading..." : friendDetails?.trustPoints}
                   </span>
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Memebr since:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {loading
+                    {loading || error
                       ? "loading..."
                       : new Date(friendDetails!.memberSince).toLocaleDateString()}
                   </span>
@@ -73,19 +78,26 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Sent:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {loading ? "loading..." : friendDetails?.tasksSent}
+                    {loading || error ? "loading..." : friendDetails?.tasksSent}
                   </span>
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Recieved:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {loading ? "loading..." : friendDetails?.tasksRecieved}
+                    {loading || error ? "loading..." : friendDetails?.tasksRecieved}
                   </span>
                 </div>
               </div>
               <span className="border-b-2 border-gray-300"></span>
               <div className="mt-auto pt-3 flex justify-center gap-2">
-                <button className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ">
+                <button
+                  className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+                  onClick={async () => {
+                    const response = await removeFriend(id);
+                    console.log(response);
+                    setIsOpen(false);
+                  }}
+                >
                   Remove Friend
                 </button>
               </div>

@@ -12,7 +12,7 @@ interface FriendDetails {
 
 const useFriendDetails = (id: number) => {
   const { data, error, mutate } = useSWR<FriendDetails, AxiosError>(
-    "user/friends/:id",
+    id ? "user/friends/:id" : null,
     async () => {
       try {
         const response = await axiosInstance.get(`user/friends/${id}`);
@@ -24,7 +24,6 @@ const useFriendDetails = (id: number) => {
   );
 
   const loading = !data && !error;
-  console.log(data);
 
   return { friendDetails: data, error, loading, mutate };
 };

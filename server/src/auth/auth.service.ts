@@ -132,7 +132,7 @@ export class AuthService {
     validatePassword(newPassword);
 
     const id = Number(userId);
-    const user = this.userService.findById(id);
+    const user = this.userService.findByIdFull(id);
     if (!user) {
       throw new BadRequestException('User no longer exists!');
     }

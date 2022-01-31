@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import Layout from "../components/Layout";
 
 const Home = () => {
-  return <main className="h-content bg-gray-50">index page</main>;
+  return <>index page</>;
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {
