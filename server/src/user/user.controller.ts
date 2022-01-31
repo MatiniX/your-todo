@@ -53,6 +53,11 @@ export class UserController {
     return { id: friendRequest.id, newState: friendRequest.state };
   }
 
+  @Get('leaderboard')
+  getLeaderboard(@Req() req) {
+    return this.userService.getLeaderboard(req.session.passport.user.id);
+  }
+
   @Patch('notifications')
   markSeenNotifications(@Body() ids: number[]) {
     return this.notificationService.markAsSeen(ids);

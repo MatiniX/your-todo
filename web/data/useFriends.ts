@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
-import { User } from "./useUser";
 
 interface Friend {
   id: number;
