@@ -10,7 +10,7 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
-  const { friendDetails, isValidating, isLoading, error, mutate } = useUserDetails(id);
+  const { userDetails, isValidating, isLoading, error, mutate } = useUserDetails(id);
 
   useEffect(() => {
     mutate();
@@ -55,7 +55,7 @@ const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
               <div className="mb-2">
                 <h2 className="text-lg font-medium text-gray-500">Username:</h2>
                 <Dialog.Title className="text-2xl font-bold text-gray-800">
-                  {isValidating ? "loading..." : friendDetails?.username}
+                  {isValidating ? "loading..." : userDetails?.username}
                 </Dialog.Title>
               </div>
               <span className="border-b-2 border-gray-300"></span>
@@ -63,7 +63,7 @@ const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
                 <div>
                   <h3 className="text-gray-500 text-lg">Trust Points:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : friendDetails?.trustPoints}
+                    {isValidating ? "loading..." : userDetails?.trustPoints}
                   </span>
                 </div>
                 <div>
@@ -71,19 +71,19 @@ const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
                   <span className="text-gray-800 text-xl font-bold">
                     {isValidating || isLoading
                       ? "loading..."
-                      : new Date(friendDetails!.memberSince).toLocaleDateString()}
+                      : new Date(userDetails!.memberSince).toLocaleDateString()}
                   </span>
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Sent:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : friendDetails?.tasksSent}
+                    {isValidating ? "loading..." : userDetails?.tasksSent}
                   </span>
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Recieved:</h3>
                   <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : friendDetails?.tasksRecieved}
+                    {isValidating ? "loading..." : userDetails?.tasksRecieved}
                   </span>
                 </div>
               </div>

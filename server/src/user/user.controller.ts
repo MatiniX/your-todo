@@ -24,8 +24,13 @@ export class UserController {
   ) {}
 
   @Get('details')
-  details(@Req() req) {
-    return this.userService.findByIdFull(req.session.passport.user.id);
+  getDetails(@Req() req) {
+    return this.userService.getUserDetails(req.session.passport.user.id);
+  }
+
+  @Get('stats')
+  getStats(@Req() req) {
+    return this.userService.getUserStats(req.session.passport.user.id);
   }
 
   @Get('notifications')

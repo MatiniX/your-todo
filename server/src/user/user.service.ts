@@ -4,7 +4,7 @@ import * as argon2 from 'argon2';
 import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
 import { getConnection } from 'typeorm';
 import { NotificationService } from 'src/services/notification.service';
-import { Task } from 'src/entities/Task';
+import { Task, TaskState } from 'src/entities/Task';
 
 @Injectable()
 export class UserService {
@@ -70,6 +70,12 @@ export class UserService {
     await User.update({ id }, { password: hashedPassword });
   }
 
+  getUserDetails(userId: number) {
+    return User.findOne(userId, {
+      select: ['id', 'email', 'username', 'createdAt'],
+    });
+  }
+
   async getFriends(userId: number) {
     return User.getFriends(userId);
   }
@@ -95,9 +101,45 @@ export class UserService {
     };
   }
 
-  /**
-   * Prerobiť! Teoreticky by sa malo dať všetko potrebné získať v jednej query cez getConnection().query()
-   */
+  async getUserStats(userId: number) {
+    const user = await await User.findOne(userId, {
+      relations: ['sentTasks', 'recievedTasks', 'friends'],
+    });
+
+    const tasksCompleted = await Task.find({
+      where: { taskState: TaskState.FULFILLED, toUserId: userId },
+    });
+
+    const tasksFailed = await Task.find({
+      where: { taskState: TaskState.UNFULFILLED, toUserId: userId },
+    });
+
+    const myPlacement: Array<any> = await getConnection().query(
+      `
+    WITH "all" AS (
+      SELECT "id", "username", "trustPoints",
+      ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
+      FROM "user"
+    )
+    SELECT
+    "rank"
+    FROM "all"
+    WHERE "all"."id" = $1`,
+      [userId],
+    );
+
+    const myRank = myPlacement[0];
+
+    return {
+      trustPoints: user.trustPoints,
+      tasksCompleted: tasksCompleted.length,
+      tasksFailed: tasksFailed.length,
+      friends: user.friends.length,
+      tasksSent: user.sentTasks.length,
+      tasksRecieved: user.recievedTasks.length,
+      ...myRank,
+    };
+  }
 
   async getLeaderboard(myId: number) {
     const top = await User.find({
@@ -106,22 +148,6 @@ export class UserService {
       select: ['id', 'trustPoints', 'username'],
     });
 
-    // const myPlacement: Array<any> = await getConnection().query(
-    //   `
-    // WITH "all" AS (
-    //   SELECT "id", "username", "trustPoints",
-    //   ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
-    //   FROM "user"
-    // )
-    // SELECT
-    // "rank",
-    // "trustPoints"
-    // FROM "all"
-    // WHERE "all"."id" = $1`,
-    //   [myId],
-    // );
-
-    // const myStats = myPlacement[0];
     return top;
   }
 

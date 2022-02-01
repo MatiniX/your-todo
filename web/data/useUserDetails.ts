@@ -25,7 +25,7 @@ const useUserDetails = (id: number) => {
 
   const isLoading = !error && !data;
 
-  return { friendDetails: data, error, isValidating, isLoading, mutate };
+  return { userDetails: data, error, isValidating, isLoading, mutate };
 };
 
 export { useUserDetails };
