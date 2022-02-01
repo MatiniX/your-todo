@@ -106,23 +106,23 @@ export class UserService {
       select: ['id', 'trustPoints', 'username'],
     });
 
-    const myPlacement: Array<any> = await getConnection().query(
-      `
-    WITH "all" AS (
-      SELECT "id", "username", "trustPoints",
-      ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
-      FROM "user"
-    ) 
-    SELECT 
-    "rank",
-    "trustPoints"
-    FROM "all"
-    WHERE "all"."id" = $1`,
-      [myId],
-    );
+    // const myPlacement: Array<any> = await getConnection().query(
+    //   `
+    // WITH "all" AS (
+    //   SELECT "id", "username", "trustPoints",
+    //   ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
+    //   FROM "user"
+    // )
+    // SELECT
+    // "rank",
+    // "trustPoints"
+    // FROM "all"
+    // WHERE "all"."id" = $1`,
+    //   [myId],
+    // );
 
-    const myStats = myPlacement[0];
-    return { top, myStats };
+    // const myStats = myPlacement[0];
+    return top;
   }
 
   /**

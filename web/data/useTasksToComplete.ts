@@ -19,7 +19,7 @@ interface TasksToComplete {
 }
 
 const useTasksToComplete = () => {
-  const { data, error, mutate } = useSWR<TasksToComplete[], AxiosError>(
+  const { data, error, mutate, isValidating } = useSWR<TasksToComplete[], AxiosError>(
     "task/to-complete",
     async () => {
       try {
@@ -33,8 +33,7 @@ const useTasksToComplete = () => {
 
   // zoradí tasky podľa dátumu vytvorenia od najnovších
   const sortedData = data?.sort((a, b) => (a.date < b.date ? 1 : b.date < a.date ? -1 : 0));
-  const loading = !data && !error;
 
-  return { allTasks: sortedData, error, loading, mutate };
+  return { allTasks: sortedData, error, isValidating, mutate };
 };
 export { useTasksToComplete };

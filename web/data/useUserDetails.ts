@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
 
-interface FriendDetails {
+interface UserDetails {
   username: string;
   trustPoints: number;
   memberSince: string;
@@ -10,8 +10,8 @@ interface FriendDetails {
   tasksRecieved: number;
 }
 
-const useFriendDetails = (id: number) => {
-  const { data, error, mutate } = useSWR<FriendDetails, AxiosError>(
+const useUserDetails = (id: number) => {
+  const { data, error, isValidating, mutate } = useSWR<UserDetails, AxiosError>(
     id ? "user/friends/:id" : null,
     async () => {
       try {
@@ -23,9 +23,9 @@ const useFriendDetails = (id: number) => {
     }
   );
 
-  const loading = !data && !error;
+  const isLoading = !error && !data;
 
-  return { friendDetails: data, error, loading, mutate };
+  return { friendDetails: data, error, isValidating, isLoading, mutate };
 };
 
-export default useFriendDetails;
+export { useUserDetails };

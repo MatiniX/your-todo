@@ -7,7 +7,7 @@ import SendFriendRequest from "../components/SendFriendRequest";
 import useFriends from "../data/useFriends";
 
 const Friends = () => {
-  const { friends, loading, error } = useFriends();
+  const { friends, isValidating, error } = useFriends();
   const [friendDetailsOpen, setFriendDetailsOpen] = useState(false);
   const [friendId, setFriendId] = useState<number>();
   const [friendRequestOpen, setFriendRequestOpen] = useState(false);
@@ -25,23 +25,38 @@ const Friends = () => {
           Add Friend
         </button>
       </div>
-
-      <div className="flex flex-wrap gap-4 mt-4">
-        {friends
-          ? friends.map((friend) => (
-              <FriendCard
-                key={friend.id}
-                id={friend.id}
-                username={friend.username}
-                trustPoints={friend.trustPoints}
-                setFriendDetailOpen={setFriendDetailsOpen}
-                setFriendId={setFriendId}
-              />
-            ))
-          : "no friends"}
-      </div>
-      <SendFriendRequest isOpen={friendRequestOpen} setIsOpen={setFriendRequestOpen} />
-      <FriendDetails id={friendId!} isOpen={friendDetailsOpen} setIsOpen={setFriendDetailsOpen} />
+      {isValidating ? (
+        <h1>loading...</h1>
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-4 mt-4">
+            {isValidating ? (
+              <h1>loading</h1>
+            ) : (
+              <>
+                {friends
+                  ? friends.map((friend) => (
+                      <FriendCard
+                        key={friend.id}
+                        id={friend.id}
+                        username={friend.username}
+                        trustPoints={friend.trustPoints}
+                        setFriendDetailOpen={setFriendDetailsOpen}
+                        setFriendId={setFriendId}
+                      />
+                    ))
+                  : "no friends"}
+                <FriendDetails
+                  id={friendId!}
+                  isOpen={friendDetailsOpen}
+                  setIsOpen={setFriendDetailsOpen}
+                />
+              </>
+            )}
+          </div>
+          <SendFriendRequest isOpen={friendRequestOpen} setIsOpen={setFriendRequestOpen} />
+        </>
+      )}
     </>
   );
 };

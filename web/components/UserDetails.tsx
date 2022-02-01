@@ -1,17 +1,16 @@
-import { Dialog, Transition } from "@headlessui/react";
+import { Transition, Dialog } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, SetStateAction, useEffect } from "react";
 import { useUserDetails } from "../data/useUserDetails";
-import { removeFriend } from "../utils/friendsUtils";
 
-interface FriendDetailsProps {
+interface UserDetailsProps {
   id: number;
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
-  const { friendDetails, error, isValidating, isLoading, mutate } = useUserDetails(id);
+const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
+  const { friendDetails, isValidating, isLoading, error, mutate } = useUserDetails(id);
 
   useEffect(() => {
     mutate();
@@ -88,19 +87,6 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
                   </span>
                 </div>
               </div>
-              <span className="border-b-2 border-gray-300"></span>
-              <div className="mt-auto pt-3 flex justify-center gap-2">
-                <button
-                  className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
-                  onClick={async () => {
-                    const response = await removeFriend(id);
-                    console.log(response);
-                    setIsOpen(false);
-                  }}
-                >
-                  Remove Friend
-                </button>
-              </div>
             </div>
           </Transition.Child>
         </div>
@@ -109,4 +95,4 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
   );
 };
 
-export default FriendDetails;
+export default UserDetails;

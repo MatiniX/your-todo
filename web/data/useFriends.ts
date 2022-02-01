@@ -9,17 +9,19 @@ interface Friend {
 }
 
 const useFriends = () => {
-  const { data, error, mutate } = useSWR<Friend[], AxiosError>("user/friends", async () => {
-    try {
-      const response = await axiosInstance.get("user/friends");
-      return response.data;
-    } catch (error) {
-      throw error;
+  const { data, error, mutate, isValidating } = useSWR<Friend[], AxiosError>(
+    "user/friends",
+    async () => {
+      try {
+        const response = await axiosInstance.get("user/friends");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
     }
-  });
-  const loading = !data && !error;
+  );
 
-  return { friends: data, loading, mutate, error };
+  return { friends: data, isValidating, mutate, error };
 };
 
 export default useFriends;

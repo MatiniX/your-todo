@@ -13,15 +13,15 @@ const Tasks = () => {
   const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
   const [completeTaskAlertOpen, setCompleteTaskAlertOpen] = useState(false);
 
-  const { allTasks, loading, error, mutate } = useTasksToComplete();
+  const { allTasks, isValidating, error, mutate } = useTasksToComplete();
 
   return (
     <>
-      {loading ? (
+      <h1 className="page-header">Your Tasks</h1>
+      {isValidating ? (
         <h1>loading...</h1>
       ) : (
         <>
-          <h1 className="page-header">Your Tasks</h1>
           <div className="divide-y-2 pr-4">
             {allTasks!.map((dailyTasks, idx) => {
               const { date, tasks } = dailyTasks;
