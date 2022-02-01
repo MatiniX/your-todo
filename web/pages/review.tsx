@@ -16,6 +16,7 @@ const Review = () => {
           <div className="flex flex-wrap mt-4 gap-4">
             {tasks!.map((task) => (
               <ReviewTask
+                key={task.id}
                 id={task.id}
                 title={task.title}
                 username={task.toUser.username}

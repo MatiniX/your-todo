@@ -44,7 +44,7 @@ const Sidebar = () => {
             className="flex items-center w-full"
             onClick={async () => {
               await logout();
-              await mutate();
+              mutate();
               Router.replace("/login");
             }}
           >

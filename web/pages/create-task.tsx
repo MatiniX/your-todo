@@ -5,7 +5,7 @@ import ErrorDialog from "../components/ErrorDialog";
 import InfoDialog from "../components/InfoDialog";
 import InputField from "../components/InputField";
 import Layout from "../components/Layout";
-import Selectbox from "../components/Selectbox";
+import FriendSelectbox from "../components/FriendSelectbox";
 import TextareaInput from "../components/TextareaInput";
 import createTask from "../utils/createTask";
 
@@ -42,16 +42,18 @@ const CreateTask = () => {
       >
         {(formik) => (
           <Form className="mt-8 mr-16 space-y-4">
-            <Selectbox name="to" />
+            <FriendSelectbox name="to" />
             <InputField
               largeLabel={true}
               name="title"
+              id="title"
               label="Task Title"
               type="text"
               className="max-w-4xl"
             />
             <TextareaInput
               name="description"
+              id="description"
               label="Description (optional)"
               largeLabel={true}
               className="max-w-4xl"

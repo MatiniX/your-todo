@@ -21,17 +21,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="flex h-screen">
-      {loading ? (
-        <h1>loading indicator...</h1>
-      ) : (
-        <>
-          <Sidebar />
-          <div className="ml-72 w-full">
-            <TopNav />
-            <main className="pl-8 pt-4 h-content bg-gray-50 ">{children}</main>
-          </div>
-        </>
-      )}
+      <Sidebar />
+      <div className="ml-72 w-full">
+        <TopNav />
+        <main className="pl-8 pt-4 h-content bg-gray-50 ">{children}</main>
+      </div>
     </div>
   );
 };

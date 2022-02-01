@@ -15,7 +15,7 @@ const InputField = ({ label, largeLabel = false, ...props }: InputFieldProps) =>
         htmlFor={props.id}
         className={
           largeLabel
-            ? "block text-lg font-medium text-gray-700 "
+            ? "block text-lg font-medium text-gray-700"
             : "block text-sm font-medium text-gray-700"
         }
       >
