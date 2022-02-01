@@ -37,4 +37,4 @@ const useTasksToComplete = () => {
 
   return { allTasks: sortedData, error, loading, mutate };
 };
-export default useTasksToComplete;
+export { useTasksToComplete };

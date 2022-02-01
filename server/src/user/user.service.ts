@@ -196,7 +196,6 @@ export class UserService {
     await this.notificationService.friendshipCanceled(firstUser, secondUser);
   }
 
-  // Refaktorizovať! Použiť queryBuilder pre lepšie SQL, error checking a handling
   async acceptFriendRequest(id: number) {
     const friendRequest = await FriendRequest.findOne(id, {
       relations: ['fromUser', 'toUser'],

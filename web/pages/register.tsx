@@ -34,8 +34,8 @@ const Register = () => {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             // Prihlási používateľa po registrácii
-            const { password, username } = await register(values);
-            await login(username, password);
+            await register(values);
+            await login(values.username, values.password);
             mutate();
             setSubmitting(false);
             Router.replace("/");

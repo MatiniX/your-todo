@@ -3,7 +3,7 @@ import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import Layout from "../components/Layout";
 import SingleTask from "../components/SingleTask";
 import TaskDetailsModal from "../components/TaskDetailsModal";
-import useTasks from "../data/useTasks";
+import { useTasksToComplete } from "../data/useTasksToComplete";
 
 const Tasks = () => {
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -13,7 +13,7 @@ const Tasks = () => {
   const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
   const [completeTaskAlertOpen, setCompleteTaskAlertOpen] = useState(false);
 
-  const { allTasks, loading, error, mutate } = useTasks();
+  const { allTasks, loading, error, mutate } = useTasksToComplete();
 
   return (
     <>
