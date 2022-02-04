@@ -45,8 +45,8 @@ export class UserController {
     return this.userService.getFriends(req.session.passport.user.id);
   }
 
-  @Get('friends/:id')
-  getFriendDetails(@Param('id', new ParseIntPipe()) friendId) {
+  @Get('info/:id')
+  getUserInfo(@Param('id', new ParseIntPipe()) friendId) {
     return this.userService.getFriendDetails(friendId);
   }
 

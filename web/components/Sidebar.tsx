@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Router from "next/router";
 import Logo from "./Logo";
 import SideNavLink from "./SideNavLink";
@@ -16,7 +16,11 @@ import { logout } from "../utils/auth";
 import useUser from "../data/useUser";
 
 const Sidebar = () => {
-  const { mutate } = useUser();
+  const { mutate, loggedOut } = useUser();
+
+  useEffect(() => {
+    if (loggedOut) Router.replace("/login");
+  }, [loggedOut]);
 
   return (
     <div className="fixed flex flex-col top-0 h-screen w-72 bg-sky-600">
@@ -45,7 +49,6 @@ const Sidebar = () => {
             onClick={async () => {
               await logout();
               mutate();
-              Router.replace("/login");
             }}
           >
             <i className="mx-4">

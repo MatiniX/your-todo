@@ -114,21 +114,21 @@ export class UserService {
       where: { taskState: TaskState.UNFULFILLED, toUserId: userId },
     });
 
-    const myPlacement: Array<any> = await getConnection().query(
-      `
-    WITH "all" AS (
-      SELECT "id", "username", "trustPoints",
-      ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
-      FROM "user"
-    )
-    SELECT
-    "rank"
-    FROM "all"
-    WHERE "all"."id" = $1`,
-      [userId],
-    );
+    // const myPlacement: Array<any> = await getConnection().query(
+    //   `
+    // WITH "all" AS (
+    //   SELECT "id", "username", "trustPoints",
+    //   ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
+    //   FROM "user"
+    // )
+    // SELECT
+    // "rank"
+    // FROM "all"
+    // WHERE "all"."id" = $1`,
+    //   [userId],
+    // );
 
-    const myRank = myPlacement[0];
+    // const myRank = myPlacement[0];
 
     return {
       trustPoints: user.trustPoints,
@@ -137,7 +137,6 @@ export class UserService {
       friends: user.friends.length,
       tasksSent: user.sentTasks.length,
       tasksRecieved: user.recievedTasks.length,
-      ...myRank,
     };
   }
 

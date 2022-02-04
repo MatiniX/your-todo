@@ -3,19 +3,18 @@ import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
 
 interface UserDetails {
+  id: number;
   username: string;
-  trustPoints: number;
-  memberSince: string;
-  tasksSent: number;
-  tasksRecieved: number;
+  email: string;
+  createdAt: string;
 }
 
-const useUserDetails = (id: number) => {
-  const { data, error, isValidating, mutate } = useSWR<UserDetails, AxiosError>(
-    id ? "user/friends/:id" : null,
+const useUserDetails = () => {
+  const { data, isValidating, error, mutate } = useSWR<UserDetails, AxiosError>(
+    "user/info",
     async () => {
       try {
-        const response = await axiosInstance.get(`user/friends/${id}`);
+        const response = await axiosInstance.get("user/details");
         return response.data;
       } catch (error) {
         throw error;
@@ -23,9 +22,7 @@ const useUserDetails = (id: number) => {
     }
   );
 
-  const isLoading = !error && !data;
-
-  return { userDetails: data, error, isValidating, isLoading, mutate };
+  return { userDetails: data, error, isValidating, mutate };
 };
 
 export { useUserDetails };
