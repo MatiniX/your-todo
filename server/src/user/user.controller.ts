@@ -50,6 +50,11 @@ export class UserController {
     return this.userService.getFriendDetails(friendId);
   }
 
+  @Get('friend-request')
+  getFriendRequests(@Req() req) {
+    return this.userService.getFriendRequests(req.session.passport.user.id);
+  }
+
   @Get('friend-request/:id')
   async acceptFriendRequest(@Param('id', new ParseIntPipe()) friendRequestId) {
     const friendRequest = await this.userService.acceptFriendRequest(

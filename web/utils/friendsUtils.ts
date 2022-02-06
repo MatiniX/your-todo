@@ -20,4 +20,22 @@ const sendFriendRequest = async (username: string): Promise<string> => {
   }
 };
 
-export { removeFriend, sendFriendRequest };
+const acceptFriendRequest = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`user/friend-request/${id}`);
+    return response.status === 200;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const rejectFriendRequest = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`user/friend-request/${id}`);
+    return response.status === 200;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { removeFriend, sendFriendRequest, acceptFriendRequest, rejectFriendRequest };

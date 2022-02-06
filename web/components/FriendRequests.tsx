@@ -1,6 +1,8 @@
 import { Dialog } from "@headlessui/react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import React, { SetStateAction } from "react";
+import { useFriendRequests } from "../data/useFriendRequests";
+import FriendRequestField from "./FriendRequestField";
 
 interface FriendRequestsProps {
   isOpen: boolean;
@@ -8,6 +10,8 @@ interface FriendRequestsProps {
 }
 
 const FriendRequests = ({ isOpen, setIsOpen }: FriendRequestsProps) => {
+  const { friendRequests, error, isValidating, mutate } = useFriendRequests();
+
   return (
     <Dialog
       as="div"
@@ -23,71 +27,13 @@ const FriendRequests = ({ isOpen, setIsOpen }: FriendRequestsProps) => {
           </Dialog.Title>
 
           <div className="flex flex-col divide-y-2">
-            <div className="flex items-center py-2">
-              <h6 className="text-lg text-gray-800 font-medium">
-                Username wants to be your friend
-              </h6>
-              <div className="flex gap-1 ml-auto">
-                <button className="text-green-500 hover:text-green-600">
-                  <CheckCircleIcon className="w-8" />
-                </button>
-                <button className="text-red-500 hover:text-red-600">
-                  <XCircleIcon className="w-8" />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center py-2">
-              <h6 className="text-lg text-gray-800 font-medium">
-                Username wants to be your friend
-              </h6>
-              <div className="flex gap-1 ml-auto">
-                <button className="text-green-500">
-                  <CheckCircleIcon className="w-8" />
-                </button>
-                <button className="text-red-500">
-                  <XCircleIcon className="w-8" />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center py-2">
-              <h6 className="text-lg text-gray-800 font-medium">
-                Username wants to be your friend
-              </h6>
-              <div className="flex gap-1 ml-auto">
-                <button className="text-green-500">
-                  <CheckCircleIcon className="w-8" />
-                </button>
-                <button className="text-red-500">
-                  <XCircleIcon className="w-8" />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center py-2">
-              <h6 className="text-lg text-gray-800 font-medium">
-                Username wants to be your friend
-              </h6>
-              <div className="flex gap-1 ml-auto">
-                <button className="text-green-500">
-                  <CheckCircleIcon className="w-8" />
-                </button>
-                <button className="text-red-500">
-                  <XCircleIcon className="w-8" />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center py-2">
-              <h6 className="text-lg text-gray-800 font-medium">
-                Username wants to be your friend
-              </h6>
-              <div className="flex gap-1 ml-auto">
-                <button className="text-green-500">
-                  <CheckCircleIcon className="w-8" />
-                </button>
-                <button className="text-red-500">
-                  <XCircleIcon className="w-8" />
-                </button>
-              </div>
-            </div>
+            {friendRequests?.map((friendRequest) => (
+              <FriendRequestField
+                key={friendRequest.id}
+                id={friendRequest.id}
+                username={friendRequest.fromUser.username}
+              />
+            ))}
           </div>
         </div>
       </div>

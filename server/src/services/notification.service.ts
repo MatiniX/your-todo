@@ -8,7 +8,7 @@ import { User } from 'src/entities/User';
 export class NotificationService {
   async getUserNotifications(userId: number) {
     return await Notification.find({
-      where: { userId },
+      where: { userId, seen: false },
     });
   }
 

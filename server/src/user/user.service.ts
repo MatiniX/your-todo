@@ -265,4 +265,11 @@ export class UserService {
     );
     return result.length > 0;
   }
+
+  async getFriendRequests(userId: number) {
+    return FriendRequest.find({
+      where: { toUserId: userId, state: FriendRequestState.PENDING },
+      relations: ['fromUser'],
+    });
+  }
 }
