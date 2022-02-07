@@ -9,6 +9,7 @@ export class NotificationService {
   async getUserNotifications(userId: number) {
     return await Notification.find({
       where: { userId, seen: false },
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -61,7 +62,7 @@ export class NotificationService {
     notification.type = NotificationType.TASK_COMPLETED;
     notification.user = task.fromUser;
     notification.task = task;
-    notification.message = `${task.toUser.username} has finished his task: ${task.title}. Or did he?`;
+    notification.message = `${task.toUser.username} has finished his task: ${task.title}.`;
 
     return await notification.save();
   }
@@ -71,7 +72,7 @@ export class NotificationService {
     notification.type = NotificationType.TASK_ACCEPTED;
     notification.user = task.toUser;
     notification.task = task;
-    notification.message = `${task.fromUser.username} accepted your task: ${task.title}. You have recieved trust points`;
+    notification.message = `${task.fromUser.username} accepted your task: ${task.title}.`;
 
     return await notification.save();
   }
@@ -81,7 +82,7 @@ export class NotificationService {
     notification.type = NotificationType.TASK_REJECTED;
     notification.user = task.toUser;
     notification.task = task;
-    notification.message = `${task.fromUser.username} rejected your task: ${task.title}. You have lost trust points`;
+    notification.message = `${task.fromUser.username} rejected your task: ${task.title}.`;
 
     return await notification.save();
   }

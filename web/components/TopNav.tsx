@@ -3,7 +3,7 @@ import useUser from "../data/useUser";
 import { BsBell } from "react-icons/bs";
 import { Popover } from "@headlessui/react";
 import { useNotifications } from "../data/useNotifications";
-import GenericNotification from "./GenericNotification";
+import GenericNotification from "./notifications/GenericNotification";
 import { markAsSeen } from "../utils/notifications";
 
 const TopNav = () => {

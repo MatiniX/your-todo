@@ -175,11 +175,11 @@ export class UserService {
   }
 
   async makeFriends(first: number, second: number) {
-    const firstUser = await this.findByIdFull(first);
+    const firstUser = await User.findOne(first, { relations: ['friends'] });
     if (!firstUser) {
       throw new BadRequestException(`User with id: ${first} does not exists`);
     }
-    const secondUser = await this.findByIdFull(second);
+    const secondUser = await User.findOne(second, { relations: ['friends'] });
     if (!secondUser) {
       throw new BadRequestException(`User with id: ${second} does not exists`);
     }
@@ -196,11 +196,11 @@ export class UserService {
       throw new BadRequestException("You can't unfriend yourself");
     }
 
-    const firstUser = await this.findByIdFull(first);
+    const firstUser = await User.findOne(first, { relations: ['friends'] });
     if (!firstUser) {
       throw new BadRequestException(`User with id: ${first} does not exists`);
     }
-    const secondUser = await this.findByIdFull(second);
+    const secondUser = await User.findOne(second, { relations: ['friends'] });
     if (!secondUser) {
       throw new BadRequestException(`User with id: ${second} does not exists`);
     }

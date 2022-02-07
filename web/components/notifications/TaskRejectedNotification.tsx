@@ -1,30 +1,22 @@
-import { DocumentAddIcon } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { SetStateAction } from "react";
-import { mutate } from "swr";
-import { Notification } from "../data/useNotifications";
-import { markAsSeen } from "../utils/notifications";
+import React from "react";
+import { markAsSeen } from "../../utils/notifications";
+import { GenericNotificationProps } from "./GenericNotification";
 
-interface NewTaskNotificationProps {
-  notification: Notification;
-  closePopover: () => void;
-}
-
-const NewTaskNotification = ({ notification, closePopover }: NewTaskNotificationProps) => {
+const TaskRejectedNotification = ({ notification, closePopover }: GenericNotificationProps) => {
   const router = useRouter();
-
   return (
     <div
       className="flex p-2 -m-3 items-center gap-2 hover:bg-sky-50 rounded-lg cursor-pointer"
       onClick={async () => {
         await markAsSeen([notification.id]);
-        mutate("user/notifications");
         router.replace("/tasks");
         closePopover();
       }}
     >
-      <i className="p-2 text-white bg-green-500 rounded-full">
-        <DocumentAddIcon className="w-5" />
+      <i className="p-2 text-white bg-red-500 rounded-full">
+        <XIcon className="w-5" />
       </i>
 
       <p className="text-gray-800">{notification.message}</p>
@@ -38,4 +30,4 @@ const NewTaskNotification = ({ notification, closePopover }: NewTaskNotification
   );
 };
 
-export default NewTaskNotification;
+export default TaskRejectedNotification;

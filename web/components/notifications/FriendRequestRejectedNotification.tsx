@@ -1,28 +1,25 @@
-import { UserAddIcon } from "@heroicons/react/outline";
+import { UserIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { SetStateAction } from "react";
-import { Notification } from "../data/useNotifications";
+import React from "react";
+import { markAsSeen } from "../../utils/notifications";
+import { GenericNotificationProps } from "./GenericNotification";
 
-interface NewFriendRequestNotificationProps {
-  notification: Notification;
-  closePopover: () => void;
-}
-
-const NewFriendRequestNotification = ({
+const FriendRequestRejectedNotification = ({
   notification,
   closePopover,
-}: NewFriendRequestNotificationProps) => {
+}: GenericNotificationProps) => {
   const router = useRouter();
   return (
     <div
       className="flex p-2 -m-3 items-center gap-2 hover:bg-sky-50 rounded-lg cursor-pointer"
-      onClick={() => {
+      onClick={async () => {
+        await markAsSeen([notification.id]);
         router.replace("/friends");
         closePopover();
       }}
     >
-      <i className="p-2 text-white bg-green-500 rounded-full">
-        <UserAddIcon className="w-5" />
+      <i className="p-2 text-white bg-red-500 rounded-full">
+        <UserIcon className="w-5" />
       </i>
 
       <p className="text-gray-800">{notification.message}</p>
@@ -36,4 +33,4 @@ const NewFriendRequestNotification = ({
   );
 };
 
-export default NewFriendRequestNotification;
+export default FriendRequestRejectedNotification;
