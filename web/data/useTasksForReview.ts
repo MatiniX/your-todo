@@ -1,19 +1,7 @@
 import { AxiosError } from "axios";
 import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
-
-interface Task {
-  id: number;
-  title: string;
-  description: string | null;
-  taskState: string;
-  createdAt: string;
-  updatedAt: string;
-  toUser: {
-    id: number;
-    username: string;
-  };
-}
+import { Task } from "./interfaces/Task";
 
 const useTasksForReview = () => {
   const { data, error, mutate } = useSWR<Task[], AxiosError>("task/review", async () => {

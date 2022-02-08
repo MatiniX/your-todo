@@ -1,21 +1,11 @@
 import { AxiosError } from "axios";
 import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
+import { Task } from "./interfaces/Task";
 
 interface TasksToComplete {
   date: string;
-  tasks: {
-    id: number;
-    title: string;
-    description: string | null;
-    taskState: string;
-    createdAt: Date;
-    updatedAt: Date;
-    fromUser: {
-      id: number;
-      username: string;
-    };
-  }[];
+  tasks: Task[];
 }
 
 const useTasksToComplete = () => {

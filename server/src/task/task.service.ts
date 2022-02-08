@@ -140,6 +140,75 @@ export class TaskService {
     return allTasks;
   }
 
+  async getArchived(
+    toUserId: number,
+    limit: number,
+    cursor: string | undefined,
+  ) {
+    const limitPlusOne = limit + 1;
+
+    let tasks: Task[];
+
+    if (cursor) {
+      const date = new Date(cursor);
+      tasks = await Task.createQueryBuilder('task')
+        .leftJoinAndSelect('task.fromUser', 'fromUser')
+        .where('task.toUser = :toUserId', { toUserId })
+        .andWhere(
+          '(task.taskState = :unfulfilled or task.taskState = :fulfilled)',
+          {
+            unfulfilled: TaskState.UNFULFILLED,
+            fulfilled: TaskState.FULFILLED,
+          },
+        )
+        .andWhere('task.updatedAt < :date', { date })
+        .select([
+          'task.id',
+          'task.title',
+          'task.description',
+          'task.taskState',
+          'task.createdAt',
+          'task.updatedAt',
+          'task.id',
+          'fromUser.id',
+          'fromUser.username',
+        ])
+        .orderBy('task.updatedAt', 'DESC')
+        .limit(limitPlusOne)
+        .getMany();
+    } else {
+      tasks = await Task.createQueryBuilder('task')
+        .leftJoinAndSelect('task.fromUser', 'fromUser')
+        .where('task.toUser = :toUserId', { toUserId })
+        .andWhere(
+          'task.taskState = :unfulfilled or task.taskState = :fulfilled',
+          {
+            unfulfilled: TaskState.UNFULFILLED,
+            fulfilled: TaskState.FULFILLED,
+          },
+        )
+        .select([
+          'task.id',
+          'task.title',
+          'task.description',
+          'task.taskState',
+          'task.createdAt',
+          'task.updatedAt',
+          'task.id',
+          'fromUser.id',
+          'fromUser.username',
+        ])
+        .orderBy('task.updatedAt', 'DESC')
+        .limit(limitPlusOne)
+        .getMany();
+    }
+
+    return {
+      tasks: tasks.slice(0, limit),
+      hasMore: tasks.length === limitPlusOne,
+    };
+  }
+
   async getById(taskId: number) {
     const task = await Task.findOne(taskId, {
       relations: ['fromUser', 'toUser'],

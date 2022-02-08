@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -40,8 +41,16 @@ export class TaskController {
   }
 
   @Get('archived')
-  getArchivedTasks(@Req() req) {
-    return this.taskService.getAllArchived(req.session.passport.user.id);
+  getArchivedTasks(
+    @Req() req,
+    @Query('cursor') cursor,
+    @Query('limit', new ParseIntPipe()) limit,
+  ) {
+    return this.taskService.getArchived(
+      req.session.passport.user.id,
+      limit,
+      cursor,
+    );
   }
 
   @Get(':id')
