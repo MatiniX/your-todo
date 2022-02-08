@@ -1,13 +1,28 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { Task } from "../data/interfaces/Task";
 
 interface ArchivedTaskCardProps {
   task: Task;
+  index: number;
+  setTaskDetailOpen: React.Dispatch<SetStateAction<boolean>>;
+  setSelectedTaskIdx: React.Dispatch<SetStateAction<number>>;
 }
 
-const ArchivedTaskCard = ({ task }: ArchivedTaskCardProps) => {
+const ArchivedTaskCard = ({
+  task,
+  index,
+  setTaskDetailOpen,
+  setSelectedTaskIdx,
+}: ArchivedTaskCardProps) => {
   return (
-    <div key={task.id} className="py-3 pl-5 w-80 bg-white rounded shadow">
+    <div
+      key={task.id}
+      className="py-3 pl-5 w-80 bg-white rounded shadow"
+      onClick={() => {
+        setTaskDetailOpen(true);
+        setSelectedTaskIdx(index);
+      }}
+    >
       <div className="flex flex-col">
         <h3 className="text-xl text-gray-800 font-semibold">{task.title}</h3>
         <p className="text-gray-500">

@@ -35,7 +35,7 @@ const Tasks = () => {
                         key={idx}
                         id={task.id}
                         title={task.title}
-                        fromUser={task.fromUser.username}
+                        fromUser={task.fromUser!.username}
                         description={task.description}
                         setDetailsOpen={setDetailsOpen}
                         setCurrentTaskAuthor={setCurrentTaskAuthor}

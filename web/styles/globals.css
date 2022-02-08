@@ -37,3 +37,7 @@
     @apply font-bold text-4xl text-gray-600;
   }
 }
+
+body {
+  @apply bg-gray-50;
+}
