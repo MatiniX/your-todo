@@ -1,31 +1,36 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import ArchivedTaskCard from "../components/ArchivedTaskCard";
 import Layout from "../components/Layout";
 import TaskDetailsModal from "../components/TaskDetailsModal";
+import { Task } from "../data/interfaces/Task";
 import { useArchive } from "../data/useArchive";
 
 const Archive = () => {
-  const { isValidating, allTasks, setSize, size, hasMore, isLoadingMore } = useArchive();
+  const { allTasks, setSize, size, hasMore, isLoadingMore } = useArchive();
 
   const [taskDetailOpen, setTaskDetailOpen] = useState(false);
   const [selectedTaskIdx, setSelectedTaskIdx] = useState(0);
+  const [selectedTask, setselectedTask] = useState<Task>();
+  useEffect(() => {
+    if (allTasks.length > 0) {
+      setselectedTask(allTasks[selectedTaskIdx]);
+    }
+  }, [selectedTaskIdx, allTasks]);
 
   return (
     <div className="flex flex-col h-full">
       <h1 className="page-header flex-initial">Archive</h1>
       <div className="">
-        <div className="grid grid-cols-3 justify-items-center gap-4 mt-4 pb-4 overflow-auto">
-          {isValidating
-            ? "loading..."
-            : allTasks?.map((task, index) => (
-                <ArchivedTaskCard
-                  key={task.id}
-                  task={task}
-                  index={index}
-                  setTaskDetailOpen={setTaskDetailOpen}
-                  setSelectedTaskIdx={setSelectedTaskIdx}
-                />
-              ))}
+        <div className="grid grid-cols-3 justify-items-center gap-4 mt-4 py-4 overflow-auto">
+          {allTasks?.map((task, index) => (
+            <ArchivedTaskCard
+              key={task.id}
+              task={task}
+              index={index}
+              setTaskDetailOpen={setTaskDetailOpen}
+              setSelectedTaskIdx={setSelectedTaskIdx}
+            />
+          ))}
         </div>
         {hasMore && (
           <div className="text-center mt-4">
@@ -39,14 +44,11 @@ const Archive = () => {
           </div>
         )}
       </div>
-      {isValidating ? null : (
+      {isLoadingMore || !selectedTask ? null : (
         <TaskDetailsModal
-          id={allTasks[selectedTaskIdx].id}
-          description={allTasks[selectedTaskIdx].description}
-          fromUser={allTasks[selectedTaskIdx].fromUser!.username}
-          title={allTasks[selectedTaskIdx].title}
           isOpen={taskDetailOpen}
           setIsOpen={setTaskDetailOpen}
+          task={selectedTask}
         />
       )}
     </div>

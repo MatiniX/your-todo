@@ -2,7 +2,7 @@ export interface Task {
   id: number;
   title: string;
   description: string | null;
-  taskState: "fulfilled" | "unfulfilled";
+  taskState: "fulfilled" | "unfulfilled" | "awaiting";
   createdAt: string;
   updatedAt: string;
   toUser?: {

@@ -1,23 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
+import { Task } from "../data/interfaces/Task";
 
 interface TaskDetailsModalProps {
-  id: number;
-  title: string;
-  fromUser: string;
-  description: string | null;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  task: Task | undefined;
 }
 
-const TaskDetailsModal = ({
-  id,
-  title,
-  fromUser,
-  description,
-  isOpen,
-  setIsOpen,
-}: TaskDetailsModalProps) => {
+const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) => {
+  console.log(task);
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
@@ -50,15 +42,17 @@ const TaskDetailsModal = ({
             <div className="relative flex flex-col w-4/6 h-[80vh] mx-auto px-8 py-4 bg-white rounded divide-y-2">
               <div className="mb-2">
                 <h2 className="text-lg font-medium text-gray-500">Task title:</h2>
-                <Dialog.Title className="text-2xl font-bold text-gray-800">{title}</Dialog.Title>
+                <Dialog.Title className="text-2xl font-bold text-gray-800">
+                  {task?.title}
+                </Dialog.Title>
               </div>
               <div className="">
                 <h4 className="font-normal text-gray-400">Description:</h4>
                 <Dialog.Description className="mb-8 font-normal text-gray-800">
-                  {description ? description : "There is no description to this task."}
+                  {task?.description ? task.description : "There is no description to this task."}
                 </Dialog.Description>
                 <h4 className="font-normal text-gray-400">From:</h4>
-                <h3 className="font-medium text-gray-800">{fromUser}</h3>
+                <h3 className="font-medium text-gray-800">{task?.fromUser?.username}</h3>
               </div>
 
               <div className="mt-auto pt-2 flex justify-end gap-2">
@@ -68,12 +62,14 @@ const TaskDetailsModal = ({
                 >
                   Close
                 </button>
-                <button
-                  className="px-3 py-1 w-24 bg-green-100 text-green-800 rounded-md hover:bg-green-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Complete
-                </button>
+                {task?.taskState === "awaiting" ? (
+                  <button
+                    className="px-3 py-1 w-24 bg-green-100 text-green-800 rounded-md hover:bg-green-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Complete
+                  </button>
+                ) : null}
               </div>
             </div>
           </Transition.Child>

@@ -17,7 +17,7 @@ const ArchivedTaskCard = ({
   return (
     <div
       key={task.id}
-      className="py-3 pl-5 w-80 bg-white rounded shadow"
+      className="py-3 pl-5 w-80 bg-white rounded shadow cursor-pointer transition-all hover:scale-105"
       onClick={() => {
         setTaskDetailOpen(true);
         setSelectedTaskIdx(index);

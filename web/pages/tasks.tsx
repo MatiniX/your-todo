@@ -3,6 +3,7 @@ import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import Layout from "../components/Layout";
 import SingleTask from "../components/SingleTask";
 import TaskDetailsModal from "../components/TaskDetailsModal";
+import { Task } from "../data/interfaces/Task";
 import { useTasksToComplete } from "../data/useTasksToComplete";
 
 const Tasks = () => {
@@ -12,6 +13,7 @@ const Tasks = () => {
   const [currentTaskDescription, setCurrentTaskDescription] = useState<string | null>("");
   const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
   const [completeTaskAlertOpen, setCompleteTaskAlertOpen] = useState(false);
+  const [currentTask, setCurrentTask] = useState<Task>();
 
   const { allTasks, isValidating, error, mutate } = useTasksToComplete();
 
@@ -25,7 +27,7 @@ const Tasks = () => {
           <div className="divide-y-2 pr-4">
             {allTasks!.map((dailyTasks, idx) => {
               const { date, tasks } = dailyTasks;
-              console.log(date);
+
               return (
                 <div className="mb-2" key={idx}>
                   <h2 className="my-2 text-lg font-medium text-gray-500">{date}</h2>
@@ -43,6 +45,8 @@ const Tasks = () => {
                         setCurrentTaskTitle={setCurrentTaskTitle}
                         setAlertOpen={setCompleteTaskAlertOpen}
                         setCurrentTaskId={setCurrentTaskId}
+                        task={task}
+                        setCurrentTask={setCurrentTask}
                       />
                     ))}
                   </div>
@@ -50,14 +54,9 @@ const Tasks = () => {
               );
             })}
           </div>
-          <TaskDetailsModal
-            id={currentTaskId}
-            title={currentTaskTitle}
-            fromUser={currentTaskAuthor}
-            description={currentTaskDescription}
-            isOpen={detailsOpen}
-            setIsOpen={setDetailsOpen}
-          />
+          {allTasks ? (
+            <TaskDetailsModal isOpen={detailsOpen} setIsOpen={setDetailsOpen} task={currentTask} />
+          ) : null}
           <CompleteTaskAlert
             isOpen={completeTaskAlertOpen}
             setIsOpen={setCompleteTaskAlertOpen}
