@@ -33,6 +33,11 @@ export class UserController {
     return this.userService.getUserStats(req.session.passport.user.id);
   }
 
+  @Get('index-stats')
+  getIndexStats(@Req() req) {
+    return this.userService.getIndexStats(req.session.passport.user.id);
+  }
+
   @Get('notifications')
   getNotifications(@Req() req) {
     return this.notificationService.getUserNotifications(
@@ -64,8 +69,8 @@ export class UserController {
   }
 
   @Get('leaderboard')
-  getLeaderboard(@Req() req) {
-    return this.userService.getLeaderboard(req.session.passport.user.id);
+  getLeaderboard() {
+    return this.userService.getLeaderboard();
   }
 
   @Patch('notifications')

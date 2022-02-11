@@ -114,22 +114,6 @@ export class UserService {
       where: { taskState: TaskState.UNFULFILLED, toUserId: userId },
     });
 
-    // const myPlacement: Array<any> = await getConnection().query(
-    //   `
-    // WITH "all" AS (
-    //   SELECT "id", "username", "trustPoints",
-    //   ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
-    //   FROM "user"
-    // )
-    // SELECT
-    // "rank"
-    // FROM "all"
-    // WHERE "all"."id" = $1`,
-    //   [userId],
-    // );
-
-    // const myRank = myPlacement[0];
-
     return {
       trustPoints: user.trustPoints,
       tasksCompleted: tasksCompleted.length,
@@ -140,7 +124,7 @@ export class UserService {
     };
   }
 
-  async getLeaderboard(myId: number) {
+  async getLeaderboard() {
     const top = await User.find({
       order: { trustPoints: 'DESC' },
       take: 10,
@@ -148,6 +132,32 @@ export class UserService {
     });
 
     return top;
+  }
+
+  async getIndexStats(userId: number) {
+    const myPlacement: Array<any> = await getConnection().query(
+      `
+    WITH "all" AS (
+      SELECT "id", "username", "trustPoints",
+      ROW_NUMBER() OVER(ORDER BY "user"."trustPoints" DESC) as "rank"
+      FROM "user"
+    )
+    SELECT
+    "rank"
+    FROM "all"
+    WHERE "all"."id" = $1`,
+      [userId],
+    );
+    const myRank = myPlacement[0].rank; // vyjme iba rank z navrátenej query
+
+    const taskToComplete = await Task.count({
+      where: { toUserId: userId, taskState: TaskState.AWAITING_COMPLETION },
+    });
+    const taskToReview = await Task.count({
+      where: { fromUserId: userId, taskState: TaskState.AWAITING_REVIEW },
+    });
+
+    return { myRank, taskToComplete, taskToReview };
   }
 
   /**

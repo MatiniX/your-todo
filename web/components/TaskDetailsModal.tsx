@@ -46,13 +46,31 @@ const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) =>
                   {task?.title}
                 </Dialog.Title>
               </div>
-              <div className="">
+              <div>
                 <h4 className="font-normal text-gray-400">Description:</h4>
                 <Dialog.Description className="mb-8 font-normal text-gray-800">
                   {task?.description ? task.description : "There is no description to this task."}
                 </Dialog.Description>
                 <h4 className="font-normal text-gray-400">From:</h4>
                 <h3 className="font-medium text-gray-800">{task?.fromUser?.username}</h3>
+                {task?.taskState === "awaiting" && (
+                  <>
+                    <h4 className="mt-4 font-normal text-gray-400">Task created on:</h4>
+                    <h3 className="font-medium text-gray-800">
+                      {new Date(task.createdAt).toLocaleDateString()}
+                    </h3>
+                  </>
+                )}
+                {task?.taskState !== "awaiting" && (
+                  <>
+                    <h4 className="mt-4 font-normal text-gray-400">
+                      {task?.taskState === "fulfilled" ? "Task accepted on:" : "Task rejected on:"}
+                    </h4>
+                    <h3 className="font-medium text-gray-800">
+                      {task?.updatedAt ? new Date(task.updatedAt).toLocaleDateString() : null}
+                    </h3>
+                  </>
+                )}
               </div>
 
               <div className="mt-auto pt-2 flex justify-end gap-2">
