@@ -4,6 +4,7 @@ import React from "react";
 import { Notification } from "../../data/useNotifications";
 import { markAsSeen } from "../../utils/notifications";
 import { GenericNotificationProps } from "./GenericNotification";
+import NotificationDate from "./NotificationDate";
 
 const FriendshipCanceledNotification = ({
   notification,
@@ -24,12 +25,7 @@ const FriendshipCanceledNotification = ({
       </i>
 
       <p className="text-gray-800">{notification.message}</p>
-      <span className="ml-auto text-gray-500">
-        {new Date(notification.createdAt).toLocaleDateString("en-GB", {
-          month: "short",
-          day: "numeric",
-        })}
-      </span>
+      <NotificationDate date={notification.createdAt} />
     </div>
   );
 };

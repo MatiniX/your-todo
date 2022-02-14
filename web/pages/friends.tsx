@@ -20,7 +20,7 @@ const Friends = () => {
       <div className="flex items-center">
         <h1 className="page-header">Friends</h1>
         <button
-          className="h-full ml-auto mr-16 py-2 px-3 rounded bg-green-700 text-white font-medium hover:bg-green-800 focus:ring-2 focus:ring-offset-2 focus:ring-green-800"
+          className="ml-auto mr-8 px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
           onClick={() => {
             setSendFriendRequestOpen(true);
           }}

@@ -4,6 +4,7 @@ import React from "react";
 import { mutate } from "swr";
 import { markAsSeen } from "../../utils/notifications";
 import { GenericNotificationProps } from "./GenericNotification";
+import NotificationDate from "./NotificationDate";
 
 const NewTaskNotification = ({ notification, closePopover }: GenericNotificationProps) => {
   const router = useRouter();
@@ -22,12 +23,7 @@ const NewTaskNotification = ({ notification, closePopover }: GenericNotification
       </i>
 
       <p className="text-gray-800">{notification.message}</p>
-      <span className="ml-auto text-gray-500">
-        {new Date(notification.createdAt).toLocaleDateString("en-GB", {
-          month: "short",
-          day: "numeric",
-        })}
-      </span>
+      <NotificationDate date={notification.createdAt} />
     </div>
   );
 };

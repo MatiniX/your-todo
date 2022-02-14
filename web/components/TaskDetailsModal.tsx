@@ -9,7 +9,6 @@ interface TaskDetailsModalProps {
 }
 
 const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) => {
-  console.log(task);
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
@@ -75,14 +74,18 @@ const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) =>
 
               <div className="mt-auto pt-2 flex justify-end gap-2">
                 <button
-                  className="px-3 py-1 w-24 bg-sky-100 text-sky-800 rounded-md hover:bg-sky-200"
+                  className="px-4 py-2 text-sm font-medium 
+                  text-sky-900 bg-sky-100 border border-transparent rounded-md 
+                  hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500"
                   onClick={() => setIsOpen(false)}
                 >
                   Close
                 </button>
                 {task?.taskState === "awaiting" ? (
                   <button
-                    className="px-3 py-1 w-24 bg-green-100 text-green-800 rounded-md hover:bg-green-200"
+                    className="px-4 py-2 text-sm font-medium 
+                  text-green-900 bg-green-100 border border-transparent rounded-md 
+                  hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                     onClick={() => setIsOpen(false)}
                   >
                     Complete

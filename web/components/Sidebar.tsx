@@ -2,18 +2,18 @@ import React, { useEffect } from "react";
 import Router from "next/router";
 import Logo from "./Logo";
 import SideNavLink from "./SideNavLink";
-import {
-  BsListTask,
-  BsPeople,
-  BsPlusCircle,
-  BsPerson,
-  BsArchive,
-  BsAward,
-  BsReception4,
-  BsBoxArrowLeft,
-} from "react-icons/bs";
 import { logout } from "../utils/auth";
 import useUser from "../data/useUser";
+import {
+  ArchiveIcon,
+  ChartBarIcon,
+  ClipboardListIcon,
+  LogoutIcon,
+  PlusCircleIcon,
+  ShieldCheckIcon,
+  UserGroupIcon,
+  UserIcon,
+} from "@heroicons/react/outline";
 
 const Sidebar = () => {
   const { mutate, loggedOut } = useUser();
@@ -26,21 +26,17 @@ const Sidebar = () => {
     <div className="fixed flex flex-col top-0 h-screen w-72 bg-sky-600">
       <Logo />
       <nav className="mt-4 space-y-1">
-        <SideNavLink to="/tasks" name="My Tasks" icon={<BsListTask className="w-10 h-10" />} />
-        <SideNavLink to="/friends" name="Friends" icon={<BsPeople className="w-10 h-10" />} />
+        <SideNavLink to="/tasks" name="My Tasks" icon={<ClipboardListIcon className="w-8" />} />
+        <SideNavLink to="/friends" name="Friends" icon={<UserGroupIcon className="w-8" />} />
         <SideNavLink
           to="/create-task"
           name="Create task"
-          icon={<BsPlusCircle className="w-10 h-10" />}
+          icon={<PlusCircleIcon className="w-8" />}
         />
-        <SideNavLink to="/profile" name="Profile" icon={<BsPerson className="w-10 h-10" />} />
-        <SideNavLink to="/archive" name="Archive" icon={<BsArchive className="w-10 h-10" />} />
-        <SideNavLink to="/review" name="Review" icon={<BsAward className="w-10 h-10" />} />
-        <SideNavLink
-          to="/leaderboard"
-          name="Leaderboard"
-          icon={<BsReception4 className="w-10 h-10" />}
-        />
+        <SideNavLink to="/profile" name="Profile" icon={<UserIcon className="w-8" />} />
+        <SideNavLink to="/archive" name="Archive" icon={<ArchiveIcon className="w-8" />} />
+        <SideNavLink to="/review" name="Review" icon={<ShieldCheckIcon className="w-8" />} />
+        <SideNavLink to="/leaderboard" name="Leaderboard" icon={<ChartBarIcon className="w-8" />} />
       </nav>
       <div className="mt-auto mb-2">
         <div className="mx-1 py-1 flex items-center text-white rounded hover:bg-sky-700">
@@ -52,7 +48,7 @@ const Sidebar = () => {
             }}
           >
             <i className="mx-4">
-              <BsBoxArrowLeft className="w-10 h-10" />
+              <LogoutIcon className="w-8" />
             </i>
 
             <h3 className="text-xl font-medium">Logout</h3>
