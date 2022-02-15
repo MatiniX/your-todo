@@ -1,7 +1,8 @@
 import { Transition, Dialog } from "@headlessui/react";
 import axios from "axios";
 import { Form, Formik } from "formik";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import * as Yup from "yup";
 import { sendFriendRequest } from "../utils/friendsUtils";
 import InputField from "./InputField";
 
@@ -59,6 +60,11 @@ const SendFriendRequest = ({ isOpen, setIsOpen }: SendFriendRequestProps) => {
                     }
                   }
                 }}
+                validationSchema={Yup.object({
+                  username: Yup.string()
+                    .min(3, "Username must be at least 3 characters!")
+                    .required("No username!"),
+                })}
               >
                 {(formik) => (
                   <Form>

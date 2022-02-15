@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Form, Formik } from "formik";
 import React, { ReactElement, useEffect, useState } from "react";
+import * as Yup from "yup";
 import ErrorDialog from "../components/ErrorDialog";
 import InfoDialog from "../components/InfoDialog";
 import InputField from "../components/InputField";
@@ -13,7 +14,7 @@ const CreateTask = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogText, setDialogText] = useState("");
-  const [dialogCloseMessage, setdialogCloseMessage] = useState("");
+  const [dialogCloseMessage, setDialogCloseMessage] = useState("");
   const [errorDialog, setErrorDialog] = useState(false);
 
   return (
@@ -36,9 +37,13 @@ const CreateTask = () => {
             }
           }
 
-          setdialogCloseMessage("Close");
+          setDialogCloseMessage("Close");
           setDialogOpen(true);
         }}
+        validationSchema={Yup.object({
+          title: Yup.string().required("Title is required!"),
+          to: Yup.number().positive("Select a friend!"),
+        })}
       >
         {(formik) => (
           <Form className="mt-8 mr-16 space-y-4">

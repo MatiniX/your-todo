@@ -21,7 +21,9 @@ const useFriends = () => {
     }
   );
 
-  return { friends: data, isValidating, mutate, error };
+  const isLoading = !data && !error;
+
+  return { friends: data, isLoading, isValidating, mutate, error };
 };
 
 export default useFriends;

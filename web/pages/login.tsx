@@ -46,7 +46,7 @@ const Login = () => {
                 Login to your Account
               </h2>
               <p className="mt-2 text-center text-sm text-gray-600">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <NextLink href="/register">
                   <a className="font-medium text-sky-600 hover:text-sky-500 hover:underline">
                     Register

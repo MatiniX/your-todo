@@ -1,6 +1,5 @@
 import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment } from "react";
-import { KeyedMutator } from "swr";
 import { Task } from "../data/interfaces/Task";
 import { useTasksToComplete } from "../data/useTasksToComplete";
 import axiosInstance from "../utils/axiosInstance";

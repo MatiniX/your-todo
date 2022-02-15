@@ -2,15 +2,15 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/solid";
 import React, { Fragment, useEffect } from "react";
 import { useUserInfo } from "../data/useUserInfo";
-import { removeFriend } from "../utils/friendsUtils";
 
 interface FriendDetailsProps {
   id: number;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  removeFriend: (id: number) => Promise<void>;
 }
 
-const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
+const FriendDetails = ({ isOpen, setIsOpen, removeFriend, id }: FriendDetailsProps) => {
   const { userInfo, error, isValidating, isLoading, mutate } = useUserInfo(id);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const FriendDetails = ({ isOpen, setIsOpen, id }: FriendDetailsProps) => {
                 <button
                   className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
                   onClick={async () => {
-                    const response = await removeFriend(id);
+                    await removeFriend(id);
                     setIsOpen(false);
                   }}
                 >

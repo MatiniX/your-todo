@@ -229,6 +229,8 @@ export class UserService {
     await secondUser.save();
 
     await this.notificationService.friendshipCanceled(firstUser, secondUser);
+
+    return firstUserFriends;
   }
 
   async acceptFriendRequest(id: number) {

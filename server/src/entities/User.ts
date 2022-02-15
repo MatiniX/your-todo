@@ -67,7 +67,7 @@ export class User extends BaseEntity {
       [userId],
     );
 
-    if (friends[0].id === null) return null;
+    if (friends[0].id === null) return [];
 
     return friends;
   }
