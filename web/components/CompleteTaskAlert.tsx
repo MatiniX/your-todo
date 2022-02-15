@@ -1,25 +1,25 @@
 import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { KeyedMutator } from "swr";
+import { Task } from "../data/interfaces/Task";
+import { useTasksToComplete } from "../data/useTasksToComplete";
 import axiosInstance from "../utils/axiosInstance";
 
 interface CompleteTaskAlertProps {
-  taskId: number;
-  taskTitle: string;
-  fromUser: string;
+  task: Task | undefined;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  mutate: KeyedMutator<any>;
+  openErrorDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CompleteTaskAlert = ({
-  taskId,
-  taskTitle,
-  fromUser,
+  task,
   isOpen,
   setIsOpen,
-  mutate,
+  openErrorDialog,
 }: CompleteTaskAlertProps) => {
+  const { mutate } = useTasksToComplete();
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog
@@ -60,8 +60,9 @@ const CompleteTaskAlert = ({
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
                   Are you sure that you have completed:{" "}
-                  <span className="text-gray-800 font-semibold">{taskTitle}</span> . Which{" "}
-                  <span className="text-gray-800 font-semibold">{fromUser}</span> gave you?
+                  <span className="text-gray-800 font-semibold">{task?.title}</span> . Which{" "}
+                  <span className="text-gray-800 font-semibold">{task?.fromUser?.username}</span>{" "}
+                  gave you?
                 </p>
               </div>
 
@@ -78,12 +79,12 @@ const CompleteTaskAlert = ({
                   className="inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
                   onClick={async () => {
                     try {
-                      await axiosInstance.patch(`task/complete/${taskId}`);
+                      await axiosInstance.patch(`task/complete/${task?.id}`);
+                      mutate(); // zatial len jednoducha hruba revalidacia
                     } catch (error) {
-                      console.log(error);
+                      openErrorDialog(true);
                     }
 
-                    mutate();
                     setIsOpen(false);
                   }}
                 >

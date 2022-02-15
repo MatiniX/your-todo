@@ -1,6 +1,5 @@
 import { Dialog } from "@headlessui/react";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useEffect } from "react";
 import { useFriendRequests } from "../data/useFriendRequests";
 import FriendRequestField from "./FriendRequestField";
 
@@ -10,7 +9,11 @@ interface FriendRequestsProps {
 }
 
 const FriendRequests = ({ isOpen, setIsOpen }: FriendRequestsProps) => {
-  const { friendRequests, error, isValidating, mutate } = useFriendRequests();
+  const { friendRequests, hasRequest, error, isValidating, mutate } = useFriendRequests();
+
+  useEffect(() => {
+    if (!hasRequest) setIsOpen(false);
+  }, [hasRequest, setIsOpen]);
 
   return (
     <Dialog

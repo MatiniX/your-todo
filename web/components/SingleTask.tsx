@@ -1,36 +1,18 @@
 import React from "react";
 import { BadgeCheckIcon, InformationCircleIcon } from "@heroicons/react/solid";
 import { Task } from "../data/interfaces/Task";
+import { useTasksToComplete } from "../data/useTasksToComplete";
 
 interface SingleTaskProps {
-  id: number;
-  title: string;
-  fromUser: string;
-  setCurrentTaskTitle: React.Dispatch<React.SetStateAction<string>>;
-  setCurrentTaskDescritpion: React.Dispatch<React.SetStateAction<string | null>>;
-  setCurrentTaskAuthor: React.Dispatch<React.SetStateAction<string>>;
-  setCurrentTaskId: React.Dispatch<React.SetStateAction<number>>;
+  task: Task;
   setDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  description: string | null;
-  task: Task;
   setCurrentTask: React.Dispatch<React.SetStateAction<Task | undefined>>;
 }
 
-const SingleTask = ({
-  id,
-  title,
-  fromUser,
-  description,
-  setCurrentTaskTitle,
-  setCurrentTaskDescritpion,
-  setCurrentTaskId,
-  setCurrentTaskAuthor,
-  setDetailsOpen,
-  setAlertOpen,
-  task,
-  setCurrentTask,
-}: SingleTaskProps) => {
+const SingleTask = ({ setDetailsOpen, setAlertOpen, task, setCurrentTask }: SingleTaskProps) => {
+  const { isValidating } = useTasksToComplete();
+
   return (
     <div className="pt-2 w-96 bg-white rounded shadow ">
       <div className="divide-y">
@@ -41,24 +23,21 @@ const SingleTask = ({
 
         <div className="flex divide-x text-gray-400">
           <button
+            disabled={isValidating}
             className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-sky-100 hover:text-sky-600"
             onClick={() => {
-              setCurrentTaskTitle(title);
-              setCurrentTaskAuthor(fromUser);
-              setCurrentTaskDescritpion(description);
-              setDetailsOpen(true);
               setCurrentTask(task);
+              setDetailsOpen(true);
             }}
           >
             <InformationCircleIcon className="h-6" />
             <p>Details</p>
           </button>
           <button
+            disabled={isValidating}
             className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-green-100 hover:text-green-600"
             onClick={() => {
-              setCurrentTaskTitle(title);
-              setCurrentTaskAuthor(fromUser);
-              setCurrentTaskId(id);
+              setCurrentTask(task);
               setAlertOpen(true);
             }}
           >

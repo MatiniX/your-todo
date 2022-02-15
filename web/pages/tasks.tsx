@@ -1,5 +1,6 @@
 import React, { ReactElement, useState } from "react";
 import CompleteTaskAlert from "../components/CompleteTaskAlert";
+import ErrorDialog from "../components/ErrorDialog";
 import Layout from "../components/Layout";
 import SingleTask from "../components/SingleTask";
 import TaskDetailsModal from "../components/TaskDetailsModal";
@@ -8,21 +9,18 @@ import { useTasksToComplete } from "../data/useTasksToComplete";
 
 const Tasks = () => {
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [currentTaskId, setCurrentTaskId] = useState(-1);
-  const [currentTaskTitle, setCurrentTaskTitle] = useState("");
-  const [currentTaskDescription, setCurrentTaskDescription] = useState<string | null>("");
-  const [currentTaskAuthor, setCurrentTaskAuthor] = useState("");
   const [completeTaskAlertOpen, setCompleteTaskAlertOpen] = useState(false);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task>();
 
-  const { allTasks, isValidating, error, mutate } = useTasksToComplete();
+  const { allTasks, hasTasks, isLoading, error } = useTasksToComplete();
 
   return (
     <>
       <h1 className="page-header">Your Tasks</h1>
-      {isValidating ? (
+      {isLoading ? (
         <h1>loading...</h1>
-      ) : (
+      ) : hasTasks ? (
         <>
           <div className="divide-y-2 pr-4">
             {allTasks!.map((dailyTasks, idx) => {
@@ -31,21 +29,13 @@ const Tasks = () => {
               return (
                 <div className="mb-2" key={idx}>
                   <h2 className="my-2 text-lg font-medium text-gray-500">{date}</h2>
-                  <div className="flex flex-wrap gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     {tasks.map((task, idx) => (
                       <SingleTask
-                        key={idx}
-                        id={task.id}
-                        title={task.title}
-                        fromUser={task.fromUser!.username}
-                        description={task.description}
-                        setDetailsOpen={setDetailsOpen}
-                        setCurrentTaskAuthor={setCurrentTaskAuthor}
-                        setCurrentTaskDescritpion={setCurrentTaskDescription}
-                        setCurrentTaskTitle={setCurrentTaskTitle}
-                        setAlertOpen={setCompleteTaskAlertOpen}
-                        setCurrentTaskId={setCurrentTaskId}
+                        key={task.id}
                         task={task}
+                        setDetailsOpen={setDetailsOpen}
+                        setAlertOpen={setCompleteTaskAlertOpen}
                         setCurrentTask={setCurrentTask}
                       />
                     ))}
@@ -54,19 +44,44 @@ const Tasks = () => {
               );
             })}
           </div>
-          {allTasks ? (
-            <TaskDetailsModal isOpen={detailsOpen} setIsOpen={setDetailsOpen} task={currentTask} />
-          ) : null}
+        </>
+      ) : (
+        <div className="text-center mt-48">
+          <h1 className="text-2xl text-gray-800">
+            {error
+              ? "There was an error while loading your tasks."
+              : "Looks like you don't have any tasks."}
+          </h1>
+          <h2 className="text-gray-500">
+            {error
+              ? "Please come back later to see if the error magically disapeared."
+              : "You can enjoy other activities!"}
+          </h2>
+        </div>
+      )}
+      {hasTasks && (
+        <>
+          <TaskDetailsModal
+            isOpen={detailsOpen}
+            setIsOpen={setDetailsOpen}
+            task={currentTask}
+            openErrorDialog={setErrorDialogOpen}
+          />
           <CompleteTaskAlert
+            task={currentTask}
             isOpen={completeTaskAlertOpen}
             setIsOpen={setCompleteTaskAlertOpen}
-            taskTitle={currentTaskTitle}
-            fromUser={currentTaskAuthor}
-            taskId={currentTaskId}
-            mutate={mutate}
+            openErrorDialog={setErrorDialogOpen}
           />
         </>
       )}
+      <ErrorDialog
+        open={errorDialogOpen}
+        setIsOpen={setErrorDialogOpen}
+        closeMessage="Close"
+        title="Something went wrong"
+        text="There was an unknown error. Try again later."
+      />
     </>
   );
 };

@@ -24,6 +24,9 @@ const useTasksToComplete = () => {
   // zoradí tasky podľa dátumu vytvorenia od najnovších
   const sortedData = data?.sort((a, b) => (a.date < b.date ? 1 : b.date < a.date ? -1 : 0));
 
-  return { allTasks: sortedData, error, isValidating, mutate };
+  const hasTasks = data && data.length > 0;
+  const isLoading = !data && !error;
+
+  return { allTasks: sortedData, error, hasTasks, isLoading, isValidating, mutate };
 };
 export { useTasksToComplete };

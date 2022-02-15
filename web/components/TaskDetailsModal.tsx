@@ -1,14 +1,20 @@
 import { Dialog, Transition } from "@headlessui/react";
+import axios from "axios";
 import React, { Fragment, useState } from "react";
 import { Task } from "../data/interfaces/Task";
+import { useTasksToComplete } from "../data/useTasksToComplete";
+import axiosInstance from "../utils/axiosInstance";
 
 interface TaskDetailsModalProps {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   task: Task | undefined;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openErrorDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) => {
+const TaskDetailsModal = ({ isOpen, setIsOpen, openErrorDialog, task }: TaskDetailsModalProps) => {
+  const { mutate } = useTasksToComplete();
+
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
@@ -86,7 +92,17 @@ const TaskDetailsModal = ({ isOpen, setIsOpen, task }: TaskDetailsModalProps) =>
                     className="px-4 py-2 text-sm font-medium 
                   text-green-900 bg-green-100 border border-transparent rounded-md 
                   hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
-                    onClick={() => setIsOpen(false)}
+                    onClick={async () => {
+                      try {
+                        await axiosInstance.patch(`task/complete/${task?.id}`);
+                        mutate(); // zatial len jednoducha hruba revalidacia
+                      } catch (error) {
+                        if (axios.isAxiosError(error)) {
+                          openErrorDialog(true);
+                        }
+                      }
+                      setIsOpen(false);
+                    }}
                   >
                     Complete
                   </button>

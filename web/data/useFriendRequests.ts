@@ -26,7 +26,10 @@ const useFriendRequests = () => {
       }
     }
   );
-  return { friendRequests: data, error, isValidating, mutate };
+
+  const hasRequest = !isValidating && !error && data!.length > 0;
+
+  return { friendRequests: data, error, isValidating, hasRequest, mutate };
 };
 
 export { useFriendRequests };

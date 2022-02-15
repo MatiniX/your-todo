@@ -34,7 +34,9 @@ const useNotifications = () => {
     }
   );
 
-  return { notifications: data, error, isValidating, mutate };
+  const hasNew = data && data.length > 0;
+
+  return { notifications: data, error, hasNew, isValidating, mutate };
 };
 
 export { useNotifications };

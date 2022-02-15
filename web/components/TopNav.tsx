@@ -9,7 +9,7 @@ import { BellIcon } from "@heroicons/react/outline";
 
 const TopNav = () => {
   const { user } = useUser();
-  const { notifications, mutate } = useNotifications();
+  const { notifications, hasNew, mutate } = useNotifications();
 
   return (
     <div className="relative flex items-center w-full h-16 bg-white shadow z-10">
@@ -18,7 +18,7 @@ const TopNav = () => {
           <div className="relative flex items-center">
             <Popover.Button className="mr-4">
               <BellIcon className="w-8 text-gray-600" />
-              {notifications && (
+              {hasNew && (
                 <span className="absolute inline-flex h-2 w-2 rounded-full bg-red-500 outline outline-white top-0 left-5"></span>
               )}
             </Popover.Button>

@@ -32,6 +32,7 @@ export class TaskController {
 
   @Get('to-complete')
   getTasksForCompletion(@Req() req) {
+    //throw new BadRequestException('Something went wrong'); // iba na testovanie!
     return this.taskService.getAllUncomplete(req.session.passport.user.id);
   }
 
@@ -75,6 +76,7 @@ export class TaskController {
 
   @Patch('complete/:id')
   markTaskComplete(@Param('id', new ParseIntPipe()) id) {
+    //throw new BadRequestException('Something went wrong'); // iba na testovanie!
     return this.taskService.setForReview(id);
   }
 

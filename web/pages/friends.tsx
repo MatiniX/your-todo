@@ -1,11 +1,11 @@
 import { MailIcon } from "@heroicons/react/outline";
 import React, { ReactElement, useEffect, useState } from "react";
-import { mutate } from "swr";
 import FriendCard from "../components/FriendCard";
 import FriendDetails from "../components/FriendDetails";
 import FriendRequests from "../components/FriendRequests";
 import Layout from "../components/Layout";
 import SendFriendRequest from "../components/SendFriendRequest";
+import { useFriendRequests } from "../data/useFriendRequests";
 import useFriends from "../data/useFriends";
 
 const Friends = () => {
@@ -14,6 +14,7 @@ const Friends = () => {
   const [friendId, setFriendId] = useState<number>();
   const [sendFriendRequestOpen, setSendFriendRequestOpen] = useState(false);
   const [friendRequestsOpen, setFriendRequestsOpen] = useState(false);
+  const { hasRequest } = useFriendRequests();
 
   return (
     <>
@@ -57,12 +58,14 @@ const Friends = () => {
               </>
             )}
 
-            <button
-              className="fixed right-0 bottom-0 mr-16 mb-8 p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 shadow-lg"
-              onClick={() => setFriendRequestsOpen(true)}
-            >
-              <MailIcon className="w-8" />
-            </button>
+            {hasRequest && (
+              <button
+                className="fixed right-0 bottom-0 mr-16 mb-8 p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 shadow-lg"
+                onClick={() => setFriendRequestsOpen(true)}
+              >
+                <MailIcon className="w-8" />
+              </button>
+            )}
           </div>
           <SendFriendRequest isOpen={sendFriendRequestOpen} setIsOpen={setSendFriendRequestOpen} />
           <FriendRequests isOpen={friendRequestsOpen} setIsOpen={setFriendRequestsOpen} />
