@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Form, Formik } from "formik";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import * as Yup from "yup";
 import ErrorDialog from "../components/ErrorDialog";
 import InfoDialog from "../components/InfoDialog";
@@ -72,7 +72,7 @@ const CreateTask = () => {
             <button
               disabled={formik.isSubmitting}
               type="submit"
-              className="px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              className="px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition"
             >
               {formik.isSubmitting ? "Creating..." : "Create Task"}
             </button>

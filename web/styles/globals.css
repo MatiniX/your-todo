@@ -36,6 +36,18 @@
   .page-header {
     @apply font-bold text-4xl text-gray-600;
   }
+
+  .leaderboard:nth-child(1) {
+    @apply bg-yellow-100;
+  }
+
+  .leaderboard:nth-child(2) {
+    @apply bg-slate-100;
+  }
+
+  .leaderboard:nth-child(3) {
+    @apply bg-orange-100;
+  }
 }
 
 body {

@@ -36,7 +36,7 @@ const Review = () => {
           <h4 className="text-gray-400">Send some tasks to your friends!</h4>
           <button
             className="flex items-center gap-1 px-3 py-2 mt-4 bg-sky-500 hover:bg-sky-600 focus:ring-2 
-        focus:ring-sky-600 focus:ring-offset-2 text-white rounded"
+        focus:ring-sky-600 focus:ring-offset-2 text-white rounded transition"
             onClick={() => router.replace("/create-task")}
           >
             <i>

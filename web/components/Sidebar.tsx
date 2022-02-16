@@ -39,7 +39,7 @@ const Sidebar = () => {
         <SideNavLink to="/leaderboard" name="Leaderboard" icon={<ChartBarIcon className="w-8" />} />
       </nav>
       <div className="mt-auto mb-2">
-        <div className="mx-1 py-1 flex items-center text-white rounded hover:bg-sky-700">
+        <div className="mx-1 py-1 flex items-center text-white rounded hover:bg-sky-700 transition">
           <button
             className="flex items-center w-full"
             onClick={async () => {

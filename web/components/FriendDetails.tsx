@@ -113,7 +113,7 @@ const FriendDetails = ({ isOpen, setIsOpen, removeFriend, id }: FriendDetailsPro
               <span className="border-b-2 border-gray-300"></span>
               <div className="mt-auto pt-3 flex justify-center gap-2">
                 <button
-                  className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+                  className="py-2 px-6 bg-red-500 font-medium text-white rounded hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition"
                   onClick={async () => {
                     await removeFriend(id);
                     setIsOpen(false);

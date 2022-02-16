@@ -1,6 +1,5 @@
 import React from "react";
 import useUser from "../data/useUser";
-import { BsBell } from "react-icons/bs";
 import { Popover } from "@headlessui/react";
 import { useNotifications } from "../data/useNotifications";
 import GenericNotification from "./notifications/GenericNotification";
@@ -17,7 +16,7 @@ const TopNav = () => {
         <Popover className="relative">
           <div className="relative flex items-center">
             <Popover.Button className="mr-4">
-              <BellIcon className="w-8 text-gray-600" />
+              <BellIcon className="w-8 text-gray-600 hover:text-gray-800 transition" />
               {hasNew && (
                 <span className="absolute inline-flex h-2 w-2 rounded-full bg-red-500 outline outline-white top-0 left-5"></span>
               )}

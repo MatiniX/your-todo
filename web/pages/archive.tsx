@@ -43,7 +43,7 @@ const Archive = () => {
               <div className="text-center mt-4">
                 <button
                   disabled={isLoadingMore}
-                  className="mb-8 px-3 py-2 bg-sky-100 text-sky-700 hover:bg-sky-200 hover:textsk rounded"
+                  className="mb-8 px-3 py-2 bg-sky-100 text-sky-700 hover:bg-sky-200 hover:textsk rounded transition"
                   onClick={() => setSize(size + 1)}
                 >
                   {isLoadingMore ? "Loading..." : "Load More"}

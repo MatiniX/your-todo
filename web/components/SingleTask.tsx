@@ -14,7 +14,7 @@ const SingleTask = ({ setDetailsOpen, setAlertOpen, task, setCurrentTask }: Sing
   const { isValidating } = useTasksToComplete();
 
   return (
-    <div className="pt-2 w-96 bg-white rounded shadow ">
+    <div className="pt-2 w-full bg-white rounded shadow ">
       <div className="divide-y">
         <div className="ml-4 mb-2">
           <h1 className="mb-2 font-bold text-xl text-gray-800">{task.title}</h1>
@@ -24,7 +24,8 @@ const SingleTask = ({ setDetailsOpen, setAlertOpen, task, setCurrentTask }: Sing
         <div className="flex divide-x text-gray-400">
           <button
             disabled={isValidating}
-            className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-sky-100 hover:text-sky-600"
+            className="flex justify-center gap-2 w-full py-2 
+            font-semibold hover:bg-sky-100 hover:text-sky-600 transition"
             onClick={() => {
               setCurrentTask(task);
               setDetailsOpen(true);
@@ -35,7 +36,8 @@ const SingleTask = ({ setDetailsOpen, setAlertOpen, task, setCurrentTask }: Sing
           </button>
           <button
             disabled={isValidating}
-            className="flex justify-center gap-2 w-full py-2 font-semibold hover:bg-green-100 hover:text-green-600"
+            className="flex justify-center gap-2 w-full py-2 
+            font-semibold hover:bg-green-100 hover:text-green-600 transition"
             onClick={() => {
               setCurrentTask(task);
               setAlertOpen(true);

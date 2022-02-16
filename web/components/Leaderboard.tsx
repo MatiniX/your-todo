@@ -41,7 +41,7 @@ const Leaderboard = ({ setOpenDetails, setCurrUserId }: LeaderboardProps) => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {data?.map((user, idx) => (
-                  <tr key={user.id}>
+                  <tr key={user.id} className="leaderboard">
                     <td className="px-6 py-3">
                       <span className="text-sm font-bold text-gray-900">{idx + 1}.</span>
                     </td>
