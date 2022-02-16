@@ -7,7 +7,7 @@ interface LeaderboardProps {
 }
 
 const Leaderboard = ({ setOpenDetails, setCurrUserId }: LeaderboardProps) => {
-  const { data, error, loading } = useLeaderboard();
+  const { data } = useLeaderboard();
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto">
@@ -40,35 +40,31 @@ const Leaderboard = ({ setOpenDetails, setCurrUserId }: LeaderboardProps) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {loading
-                  ? "loading"
-                  : data?.map((user, idx) => (
-                      <tr key={user.id}>
-                        <td className="px-6 py-3">
-                          <span className="text-sm font-bold text-gray-900">{idx + 1}.</span>
-                        </td>
-                        <td className="px-6 py-3">
-                          <div className="text-sm font-medium text-gray-900">{user.username}</div>
-                        </td>
-                        <td className="px-6 py-3">
-                          <div className="text-sm font-medium text-gray-900">
-                            {user.trustPoints}
-                          </div>
-                        </td>
-                        <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
-                          <a
-                            href="#"
-                            className="text-sky-600 hover:text-sky-900"
-                            onClick={() => {
-                              setCurrUserId(user.id);
-                              setOpenDetails(true);
-                            }}
-                          >
-                            Details
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
+                {data?.map((user, idx) => (
+                  <tr key={user.id}>
+                    <td className="px-6 py-3">
+                      <span className="text-sm font-bold text-gray-900">{idx + 1}.</span>
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="text-sm font-medium text-gray-900">{user.username}</div>
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="text-sm font-medium text-gray-900">{user.trustPoints}</div>
+                    </td>
+                    <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium">
+                      <a
+                        href="#"
+                        className="text-sky-600 hover:text-sky-900"
+                        onClick={() => {
+                          setCurrUserId(user.id);
+                          setOpenDetails(true);
+                        }}
+                      >
+                        Details
+                      </a>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

@@ -22,7 +22,9 @@ const useUserDetails = () => {
     }
   );
 
-  return { userDetails: data, error, isValidating, mutate };
+  const isLoading = !data && !error;
+
+  return { userDetails: data, error, isLoading, mutate };
 };
 
 export { useUserDetails };

@@ -23,7 +23,7 @@ const useUserInfo = (id: number) => {
     }
   );
 
-  const isLoading = !error && !data;
+  const isLoading = isValidating || (!error && !data);
 
   return { userInfo: data, error, isValidating, isLoading, mutate };
 };

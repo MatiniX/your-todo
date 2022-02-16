@@ -14,10 +14,37 @@ const ArchivedTaskCard = ({
   setTaskDetailOpen,
   setSelectedTaskIdx,
 }: ArchivedTaskCardProps) => {
+  let taskPoints;
+  if (task.taskState === "fulfilled") {
+    switch (task.taskDifficulty) {
+      case "easy":
+        taskPoints = 10;
+        break;
+      case "medium":
+        taskPoints = 20;
+        break;
+      case "hard":
+        taskPoints = 30;
+        break;
+    }
+  } else if (task.taskState === "unfulfilled") {
+    switch (task.taskDifficulty) {
+      case "easy":
+        taskPoints = -10;
+        break;
+      case "medium":
+        taskPoints = -15;
+        break;
+      case "hard":
+        taskPoints = -20;
+        break;
+    }
+  }
+
   return (
     <div
       key={task.id}
-      className="py-3 pl-5 w-80 bg-white rounded shadow cursor-pointer transition-all hover:scale-105"
+      className="py-3 pl-5 w-full bg-white rounded shadow cursor-pointer transition-all hover:scale-105"
       onClick={() => {
         setTaskDetailOpen(true);
         setSelectedTaskIdx(index);
@@ -41,7 +68,7 @@ const ArchivedTaskCard = ({
               task.taskState === "fulfilled" ? "text-green-500" : "text-red-500"
             } font-medium`}
           >
-            {task.taskState === "fulfilled" ? "+10" : "-10"}{" "}
+            {taskPoints}
           </span>
         </p>
       </div>

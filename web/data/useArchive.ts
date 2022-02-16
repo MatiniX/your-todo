@@ -35,7 +35,7 @@ const useArchive = () => {
     }
   });
 
-  // tento trik spraví jednu array so všetkými taskami z data v ktorej sú taksky separátne splolu s hasMore property
+  // tento trik spraví jednu array so všetkými taskami z data v ktorej sú taksky separátne spolu s hasMore property
 
   const allTasks: Task[] = data ? new Array<Task>().concat(...data.map((d) => d.tasks)) : [];
 
@@ -53,6 +53,7 @@ const useArchive = () => {
     setSize,
     size,
     isLoadingMore,
+    isLoadingInitialData,
     hasMore,
     isRefreshing,
   };

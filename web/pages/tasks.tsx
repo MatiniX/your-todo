@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from "react";
 import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import ErrorDialog from "../components/ErrorDialog";
 import Layout from "../components/Layout";
+import LoadingSpinner from "../components/LoadingSpinner";
 import SingleTask from "../components/SingleTask";
 import TaskDetailsModal from "../components/TaskDetailsModal";
 import { Task } from "../data/interfaces/Task";
@@ -18,8 +19,11 @@ const Tasks = () => {
   return (
     <>
       <h1 className="page-header">Your Tasks</h1>
+
       {isLoading ? (
-        <h1>loading...</h1>
+        <div className="h-16 w-16 mx-auto mt-32">
+          <LoadingSpinner />
+        </div>
       ) : hasTasks ? (
         <>
           <div className="divide-y-2 pr-4">

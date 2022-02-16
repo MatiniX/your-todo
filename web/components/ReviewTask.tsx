@@ -16,7 +16,7 @@ const ReviewTask = ({ id, title, username, completedOn }: ReviewTaskProps) => {
   const { tasks, mutate } = useTasksForReview();
 
   return (
-    <div className="w-96 bg-white rounded shadow divide-y">
+    <div className="w-full bg-white rounded shadow divide-y">
       <div className="mx-3 my-2">
         <h2 className="text-gray-500">
           <span className="font-bold text-gray-800">{username}</span> completed task:
@@ -36,7 +36,7 @@ const ReviewTask = ({ id, title, username, completedOn }: ReviewTaskProps) => {
               tasks?.filter((task) => task.id != id),
               false
             );
-            await axiosInstance.patch(`task/reject/${id}`);
+            await axiosInstance.patch(`task/reject/${id}`); // reject task
             // Revalidate data
             mutate();
           }}
@@ -51,7 +51,7 @@ const ReviewTask = ({ id, title, username, completedOn }: ReviewTaskProps) => {
               tasks?.filter((task) => task.id != id),
               false
             );
-            await axiosInstance.patch(`task/accept/${id}`);
+            await axiosInstance.patch(`task/accept/${id}`); // accept task
             mutate();
           }}
         >

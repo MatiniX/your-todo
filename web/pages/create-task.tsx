@@ -70,10 +70,11 @@ const CreateTask = () => {
               className="max-w-4xl"
             />
             <button
+              disabled={formik.isSubmitting}
               type="submit"
               className="px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              Create Task
+              {formik.isSubmitting ? "Creating..." : "Create Task"}
             </button>
           </Form>
         )}

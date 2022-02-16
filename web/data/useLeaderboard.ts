@@ -18,9 +18,9 @@ const useLeaderboard = () => {
     }
   });
 
-  const loading = !data && !error;
+  const isLoading = !data && !error;
 
-  return { data, error, mutate, loading };
+  return { data, error, mutate, isLoading };
 };
 
 export { useLeaderboard };

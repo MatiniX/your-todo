@@ -12,9 +12,10 @@ const useTasksForReview = () => {
       throw error;
     }
   });
-  const loading = !error && !data;
+  const isLoading = !error && !data;
+  const hasTasks = !isLoading && data!.length > 0;
 
-  return { tasks: data, error, mutate, loading };
+  return { tasks: data, error, mutate, isLoading, hasTasks };
 };
 
 export default useTasksForReview;

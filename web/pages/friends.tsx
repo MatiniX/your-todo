@@ -4,6 +4,7 @@ import FriendCard from "../components/FriendCard";
 import FriendDetails from "../components/FriendDetails";
 import FriendRequests from "../components/FriendRequests";
 import Layout from "../components/Layout";
+import LoadingSpinner from "../components/LoadingSpinner";
 import SendFriendRequest from "../components/SendFriendRequest";
 import { useFriendRequests } from "../data/useFriendRequests";
 import useFriends from "../data/useFriends";
@@ -33,7 +34,9 @@ const Friends = () => {
         <FriendRequests isOpen={friendRequestsOpen} setIsOpen={setFriendRequestsOpen} />
       </div>
       {isLoading ? (
-        <h1>loading...</h1>
+        <div className="h-16 w-16 mx-auto mt-32">
+          <LoadingSpinner />
+        </div>
       ) : friends!.length > 0 ? (
         <>
           <div className="flex flex-wrap gap-4 mt-4">

@@ -24,7 +24,9 @@ const useUserStats = () => {
     }
   );
 
-  return { userStats: data, error, isValidating, mutate };
+  const isLoading = !data && !error;
+
+  return { userStats: data, error, isLoading, mutate };
 };
 
 export { useUserStats };

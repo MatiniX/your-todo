@@ -55,36 +55,60 @@ const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
               <div className="mb-2">
                 <h2 className="text-lg font-medium text-gray-500">Username:</h2>
                 <Dialog.Title className="text-2xl font-bold text-gray-800">
-                  {isValidating ? "loading..." : userInfo?.username}
+                  {isLoading ? (
+                    <div className="w-full pr-4">
+                      <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+                    </div>
+                  ) : (
+                    userInfo?.username
+                  )}
                 </Dialog.Title>
               </div>
               <span className="border-b-2 border-gray-300"></span>
               <div className="grid grid-cols-2 h-full items-center">
                 <div>
                   <h3 className="text-gray-500 text-lg">Trust Points:</h3>
-                  <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : userInfo?.trustPoints}
-                  </span>
+                  {isLoading ? (
+                    <div className="w-full pr-4">
+                      <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-800 text-xl font-bold">{userInfo?.trustPoints}</span>
+                  )}
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Memebr since:</h3>
-                  <span className="text-gray-800 text-xl font-bold">
-                    {isValidating || isLoading
-                      ? "loading..."
-                      : new Date(userInfo!.memberSince).toLocaleDateString()}
-                  </span>
+                  {isLoading ? (
+                    <div className="w-full pr-4">
+                      <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-800 text-xl font-bold">
+                      {new Date(userInfo!.memberSince).toLocaleDateString()}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Sent:</h3>
-                  <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : userInfo?.tasksSent}
-                  </span>
+                  {isLoading ? (
+                    <div className="w-full pr-4">
+                      <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-800 text-xl font-bold">{userInfo?.tasksSent}</span>
+                  )}
                 </div>
                 <div>
                   <h3 className="text-gray-500 text-lg">Tasks Recieved:</h3>
-                  <span className="text-gray-800 text-xl font-bold">
-                    {isValidating ? "loading..." : userInfo?.tasksRecieved}
-                  </span>
+                  {isLoading ? (
+                    <div className="w-full pr-4">
+                      <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-800 text-xl font-bold">
+                      {userInfo?.tasksRecieved}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

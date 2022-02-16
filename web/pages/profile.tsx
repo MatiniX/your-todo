@@ -13,8 +13,8 @@ import { useUserDetails } from "../data/useUserDetails";
 import { useUserStats } from "../data/useUserStats";
 
 const Profile = () => {
-  const { userDetails, isValidating: validatingUserDetails } = useUserDetails();
-  const { userStats, isValidating: validatingUserStats } = useUserStats();
+  const { userDetails, isLoading: loadingUserDetails } = useUserDetails();
+  const { userStats, isLoading: loadingUserStats } = useUserStats();
 
   return (
     <>
@@ -23,55 +23,67 @@ const Profile = () => {
         <div className="grid grid-cols-3 gap-8">
           <div>
             <h3 className="font-medium text-gray-500">Username</h3>
-            <h2 className="text-2xl font-bold text-gray-800">
-              {validatingUserDetails ? "loading" : userDetails?.username}
-            </h2>
+            {loadingUserDetails ? (
+              <div className="animate-pulse w-full h-6 mt-2 bg-gray-300 rounded"></div>
+            ) : (
+              <h2 className="text-2xl font-bold text-gray-800">{userDetails?.username}</h2>
+            )}
           </div>
           <div>
             <h3 className="font-medium text-gray-500">Email</h3>
-            <h2 className="text-2xl font-bold text-gray-800">
-              {validatingUserDetails ? "loading" : userDetails?.email}
-            </h2>
+            {loadingUserDetails ? (
+              <div className="animate-pulse w-full h-6 mt-2 bg-gray-300 rounded"></div>
+            ) : (
+              <h2 className="text-2xl font-bold text-gray-800">{userDetails?.email}</h2>
+            )}
           </div>
           <div>
             <h3 className="font-medium text-gray-500">Joined On</h3>
-            <h2 className="text-2xl font-bold text-gray-800">
-              {validatingUserDetails
-                ? "loading"
-                : new Date(userDetails!.createdAt).toLocaleDateString()}
-            </h2>
+            {loadingUserDetails ? (
+              <div className="animate-pulse w-full h-6 mt-2 bg-gray-300 rounded"></div>
+            ) : (
+              <h2 className="text-2xl font-bold text-gray-800">
+                {new Date(userDetails!.createdAt).toLocaleDateString()}
+              </h2>
+            )}
           </div>
         </div>
         <div className="grid grid-cols-3 mt-8 gap-8">
           <StatCard
             title="Trust Points"
-            value={validatingUserStats ? "%" : userStats!.trustPoints}
+            value={loadingUserStats ? "%" : userStats!.trustPoints}
             icon={<ChartBarIcon />}
+            loading={loadingUserStats}
           />
           <StatCard
             title="Tasks Completed"
-            value={validatingUserStats ? "%" : userStats!.tasksCompleted}
+            value={loadingUserStats ? "%" : userStats!.tasksCompleted}
             icon={<CheckIcon />}
+            loading={loadingUserStats}
           />
           <StatCard
             title="Tasks Failed"
-            value={validatingUserStats ? "%" : userStats!.tasksFailed}
+            value={loadingUserStats ? "%" : userStats!.tasksFailed}
             icon={<XIcon />}
+            loading={loadingUserStats}
           />
           <StatCard
             title="Friends"
-            value={validatingUserStats ? "%" : userStats!.friends}
+            value={loadingUserStats ? "%" : userStats!.friends}
             icon={<UserGroupIcon />}
+            loading={loadingUserStats}
           />
           <StatCard
             title="Tasks Sent"
-            value={validatingUserStats ? "%" : userStats!.tasksSent}
+            value={loadingUserStats ? "%" : userStats!.tasksSent}
             icon={<CloudUploadIcon />}
+            loading={loadingUserStats}
           />
           <StatCard
             title="Tasks Recieved"
-            value={validatingUserStats ? "%" : userStats!.tasksRecieved}
+            value={loadingUserStats ? "%" : userStats!.tasksRecieved}
             icon={<CloudDownloadIcon />}
+            loading={loadingUserStats}
           />
         </div>
       </div>
