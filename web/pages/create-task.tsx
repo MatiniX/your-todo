@@ -9,6 +9,7 @@ import Layout from "../components/Layout";
 import FriendSelectbox from "../components/FriendSelectbox";
 import TextareaInput from "../components/TextareaInput";
 import createTask from "../utils/createTask";
+import TaskDifficultySelectbox from "../components/TaskDifficultySelectbox";
 
 const CreateTask = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -21,7 +22,7 @@ const CreateTask = () => {
     <>
       <h1 className="page-header">Create Task</h1>
       <Formik
-        initialValues={{ title: "", description: "", to: -1 }}
+        initialValues={{ title: "", description: "", to: -1, difficulty: "easy" }}
         onSubmit={async (values, actions) => {
           setErrorDialog(false);
           try {
@@ -43,11 +44,16 @@ const CreateTask = () => {
         validationSchema={Yup.object({
           title: Yup.string().required("Title is required!"),
           to: Yup.number().positive("Select a friend!"),
+          difficulty: Yup.string().oneOf(["easy", "medium", "hard"]),
         })}
       >
         {(formik) => (
           <Form className="mt-8 mr-16 space-y-4">
-            <FriendSelectbox name="to" />
+            <div className="flex gap-8">
+              <FriendSelectbox name="to" />
+              <TaskDifficultySelectbox name="difficulty" />
+            </div>
+
             <InputField
               largeLabel={true}
               name="title"

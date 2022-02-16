@@ -13,12 +13,18 @@ interface FriendSelectboxProps {
 const FriendSelectbox = ({ name }: FriendSelectboxProps) => {
   const { friends, isValidating, mutate } = useFriends();
   const [selectedPerson, setSelectedPerson] = useState<User>();
-  const [field, meta, helpers] = useField(name);
+  const [_, meta, helpers] = useField(name);
+
+  const { value, error, touched } = meta;
 
   useEffect(() => {
     helpers.setValue(selectedPerson ? selectedPerson.id : -1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPerson]);
+
+  useEffect(() => {
+    if (value === -1) setSelectedPerson(undefined);
+  }, [value]);
 
   return (
     <div>
@@ -80,9 +86,7 @@ const FriendSelectbox = ({ name }: FriendSelectboxProps) => {
         </Listbox>
       </div>
       <div className="mt-1">
-        {meta.touched && meta.error ? (
-          <div className="mt-1 text-sm text-red-400">{meta.error}</div>
-        ) : null}
+        {touched && error ? <div className="mt-1 text-sm text-red-400">{error}</div> : null}
       </div>
     </div>
   );

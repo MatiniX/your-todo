@@ -15,6 +15,18 @@ interface TaskDetailsModalProps {
 const TaskDetailsModal = ({ isOpen, setIsOpen, openErrorDialog, task }: TaskDetailsModalProps) => {
   const { mutate } = useTasksToComplete();
 
+  const difficultyColor =
+    task?.taskDifficulty === "easy"
+      ? "text-green-600"
+      : task?.taskDifficulty === "medium"
+      ? "text-yellow-600"
+      : "text-red-600";
+  let taskDifficultyUpper = "";
+  if (task) {
+    taskDifficultyUpper =
+      task.taskDifficulty.charAt(0).toUpperCase() + task.taskDifficulty.slice(1);
+  }
+
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
@@ -51,16 +63,21 @@ const TaskDetailsModal = ({ isOpen, setIsOpen, openErrorDialog, task }: TaskDeta
                   {task?.title}
                 </Dialog.Title>
               </div>
-              <div>
-                <h4 className="font-normal text-gray-400">Description:</h4>
-                <Dialog.Description className="mb-8 font-normal text-gray-800">
+              <div className="pt-2">
+                <h4 className="text-gray-400">Description:</h4>
+                <Dialog.Description className="mb-4 text-gray-800">
                   {task?.description ? task.description : "There is no description to this task."}
                 </Dialog.Description>
-                <h4 className="font-normal text-gray-400">From:</h4>
-                <h3 className="font-medium text-gray-800">{task?.fromUser?.username}</h3>
+
+                <h4 className="text-gray-400">From:</h4>
+                <h3 className="mb-4 font-medium text-gray-800">{task?.fromUser?.username}</h3>
+
+                <h4 className="text-gray-400">Task difficulty:</h4>
+                <h3 className={`mb-4 font-medium ${difficultyColor}`}>{taskDifficultyUpper}</h3>
+
                 {task?.taskState === "awaiting" && (
                   <>
-                    <h4 className="mt-4 font-normal text-gray-400">Task created on:</h4>
+                    <h4 className="text-gray-400">Task created on:</h4>
                     <h3 className="font-medium text-gray-800">
                       {new Date(task.createdAt).toLocaleDateString()}
                     </h3>

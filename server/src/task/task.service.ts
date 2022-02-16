@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Task, TaskState } from 'src/entities/Task';
+import { Task, TaskDifficulty, TaskState } from 'src/entities/Task';
 import { User } from 'src/entities/User';
 import { NotificationService } from 'src/services/notification.service';
 import { getConnection } from 'typeorm';
@@ -50,7 +50,7 @@ export class TaskService {
         'task.taskState',
         'task.createdAt',
         'task.updatedAt',
-        'task.id',
+        'task.taskDifficulty',
         'fromUser.id',
         'fromUser.username',
       ])
@@ -169,7 +169,7 @@ export class TaskService {
           'task.taskState',
           'task.createdAt',
           'task.updatedAt',
-          'task.id',
+          'task.taskDifficulty',
           'fromUser.id',
           'fromUser.username',
         ])
@@ -194,7 +194,7 @@ export class TaskService {
           'task.taskState',
           'task.createdAt',
           'task.updatedAt',
-          'task.id',
+          'task.taskDifficulty',
           'fromUser.id',
           'fromUser.username',
         ])
@@ -261,6 +261,7 @@ export class TaskService {
     newTask.title = task.title;
     newTask.fromUser = fromUser;
     newTask.toUser = toUser;
+    newTask.taskDifficulty = task.difficulty;
     if (task.description) {
       newTask.description = task.description;
     }
@@ -289,11 +290,24 @@ export class TaskService {
   async acceptTaskCompletion(taskId: number) {
     const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
-        select: ['id', 'taskState', 'toUser'],
+        select: ['id', 'title', 'taskState', 'taskDifficulty', 'toUser'],
         relations: ['toUser', 'fromUser'],
       });
       task.taskState = TaskState.FULFILLED;
-      task.toUser.trustPoints += 10;
+
+      switch (task.taskDifficulty) {
+        case TaskDifficulty.EASY:
+          task.toUser.trustPoints += 10;
+          break;
+        case TaskDifficulty.MEDIUM:
+          task.toUser.trustPoints += 20;
+          break;
+        case TaskDifficulty.HARD:
+          task.toUser.trustPoints += 30;
+          break;
+        default:
+          throw new Error('Unknown task difficulty!');
+      }
 
       task.toUser.save();
       return await task.save();
@@ -305,11 +319,24 @@ export class TaskService {
   async rejectTaskCompletion(taskId: number) {
     const updatedTask = await getConnection().transaction(async (tm) => {
       const task = await tm.findOne(Task, taskId, {
-        select: ['id', 'taskState', 'toUser'],
+        select: ['id', 'title', 'taskState', 'taskDifficulty', 'toUser'],
         relations: ['toUser', 'fromUser'],
       });
       task.taskState = TaskState.UNFULFILLED;
-      task.toUser.trustPoints -= 10;
+
+      switch (task.taskDifficulty) {
+        case TaskDifficulty.EASY:
+          task.toUser.trustPoints -= 10;
+          break;
+        case TaskDifficulty.MEDIUM:
+          task.toUser.trustPoints -= 15;
+          break;
+        case TaskDifficulty.HARD:
+          task.toUser.trustPoints -= 20;
+          break;
+        default:
+          throw new Error('Unknown task difficulty!');
+      }
 
       task.toUser.save();
       return await task.save();

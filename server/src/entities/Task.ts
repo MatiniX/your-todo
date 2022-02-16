@@ -19,6 +19,12 @@ export enum TaskState {
   UNFULFILLED = 'unfulfilled',
 }
 
+export enum TaskDifficulty {
+  HARD = 'hard',
+  MEDIUM = 'medium',
+  EASY = 'easy',
+}
+
 @Entity()
 export class Task extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -36,6 +42,13 @@ export class Task extends BaseEntity {
     default: TaskState.AWAITING_COMPLETION,
   })
   taskState: TaskState;
+
+  @Column({
+    type: 'enum',
+    enum: TaskDifficulty,
+    default: TaskDifficulty.EASY,
+  })
+  taskDifficulty: TaskDifficulty;
 
   @Column({ nullable: true })
   fromUserId: number;
