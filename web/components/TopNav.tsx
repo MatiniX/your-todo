@@ -11,7 +11,7 @@ const TopNav = () => {
   const { notifications, hasNew, mutate } = useNotifications();
 
   return (
-    <div className="relative flex items-center w-full h-16 bg-white shadow z-10">
+    <div className="hidden relative md:flex items-center w-full h-16 bg-white shadow z-10">
       <div className="flex items-center ml-auto mr-8">
         <Popover className="relative">
           <div className="relative flex items-center">

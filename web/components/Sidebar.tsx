@@ -23,7 +23,7 @@ const Sidebar = () => {
   }, [loggedOut]);
 
   return (
-    <div className="fixed flex flex-col top-0 h-screen w-72 bg-sky-600">
+    <div className="hidden fixed md:flex flex-col top-0 h-screen w-72 bg-sky-600">
       <Logo />
       <nav className="mt-4 space-y-1">
         <SideNavLink to="/tasks" name="My Tasks" icon={<ClipboardListIcon className="w-8" />} />

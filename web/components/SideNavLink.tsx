@@ -11,9 +11,8 @@ const SideNavLink = ({ to, name, icon }: SideNavLinkProps) => {
   return (
     <div>
       <NextLink href={to}>
-        <a className="mx-1 py-2 flex items-center text-white rounded hover:bg-sky-700 transition">
+        <a className="mx-2 py-3 md:mx-1 md:py-2 flex items-center text-sky-500 md:text-white rounded hover:bg-sky-700 transition">
           <i className="mx-4">{icon}</i>
-
           <h3 className="text-xl font-medium">{name}</h3>
         </a>
       </NextLink>
