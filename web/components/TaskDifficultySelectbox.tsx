@@ -28,7 +28,7 @@ const TaskDifficultySelectbox = ({ name }: TaskDifficultySelectboxProps) => {
       <label htmlFor="friendSelect" className="block text-lg font-medium text-gray-700">
         Select difficulty:
       </label>
-      <div className="w-72">
+      <div className="w-full md:w-72">
         <Listbox value={selectedDifficulty} onChange={setSelectedDifficulty}>
           <div className="relative mt-1">
             <Listbox.Button

@@ -26,14 +26,14 @@ const Tasks = () => {
         </div>
       ) : hasTasks ? (
         <>
-          <div className="divide-y-2 pr-4">
+          <div className="divide-y-2">
             {allTasks!.map((dailyTasks, idx) => {
               const { date, tasks } = dailyTasks;
 
               return (
                 <div className="mb-2" key={idx}>
                   <h2 className="my-2 text-lg font-medium text-gray-500">{date}</h2>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {tasks.map((task, idx) => (
                       <SingleTask
                         key={task.id}

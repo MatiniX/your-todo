@@ -56,7 +56,7 @@ const TaskDetailsModal = ({ isOpen, setIsOpen, openErrorDialog, task }: TaskDeta
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="relative flex flex-col w-4/6 h-[80vh] mx-auto px-8 py-4 bg-white rounded divide-y-2">
+            <div className="relative flex flex-col w-10/12 md:w-1/2 h-[80vh] mx-auto px-8 py-4 bg-white rounded divide-y-2">
               <div className="mb-2">
                 <h2 className="text-lg font-medium text-gray-500">Task title:</h2>
                 <Dialog.Title className="text-2xl font-bold text-gray-800">

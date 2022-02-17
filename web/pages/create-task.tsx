@@ -48,8 +48,8 @@ const CreateTask = () => {
         })}
       >
         {(formik) => (
-          <Form className="mt-8 mr-16 space-y-4">
-            <div className="flex gap-8">
+          <Form className="flex flex-col md:block pb-4 md:mt-8 md:mr-16 space-y-4">
+            <div className="flex flex-col md:flex-row gap-4  md:gap-8">
               <FriendSelectbox name="to" />
               <TaskDifficultySelectbox name="difficulty" />
             </div>

@@ -19,8 +19,8 @@ const Profile = () => {
   return (
     <>
       <h1 className="page-header mb-8">Your Profile</h1>
-      <div className="pr-8">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="pb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="font-medium text-gray-500">Username</h3>
             {loadingUserDetails ? (
@@ -48,7 +48,7 @@ const Profile = () => {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-3 mt-8 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 mt-8 gap-8">
           <StatCard
             title="Trust Points"
             value={loadingUserStats ? "%" : userStats!.trustPoints}

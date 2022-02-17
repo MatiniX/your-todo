@@ -22,7 +22,7 @@ const Home = () => {
       <h1 className="mt-4 text-center text-4xl text-gray-800 font-bold">
         Welcome back {loading ? "" : user.username}
       </h1>
-      <div className="flex justify-center gap-8 mt-16">
+      <div className="flex flex-col md:flex-row justify-center gap-8 mt-16">
         <div
           className="flex items-center gap-4 py-4 px-8 bg-white shadow rounded-md flex-auto max-w-xs
         transition hover:scale-105 cursor-pointer"
@@ -32,10 +32,14 @@ const Home = () => {
             <PencilAltIcon className="w-16 text-sky-500" />
           </i>
           <div className="flex flex-col">
-            <span className="text-gray-800 text-4xl font-bold">
-              {isValidating ? "loading..." : stats?.taskToComplete}
-            </span>
             <p className="text-gray-500">Tasks to complete</p>
+            {isValidating ? (
+              <div className="w-full pr-4 mt-1">
+                <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+              </div>
+            ) : (
+              <span className="text-gray-800 text-4xl font-bold">{stats?.taskToComplete}</span>
+            )}
           </div>
         </div>
         <div
@@ -47,10 +51,14 @@ const Home = () => {
             <BadgeCheckIcon className="w-16 text-sky-500" />
           </i>
           <div className="flex flex-col">
-            <span className="text-gray-800 text-4xl font-bold">
-              {isValidating ? "loading..." : stats?.taskToReview}
-            </span>
             <p className="text-gray-500">Tasks to review</p>
+            {isValidating ? (
+              <div className="w-full pr-4 mt-1">
+                <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+              </div>
+            ) : (
+              <span className="text-gray-800 text-4xl font-bold">{stats?.taskToReview}</span>
+            )}
           </div>
         </div>
         <div
@@ -62,10 +70,14 @@ const Home = () => {
             <ChartSquareBarIcon className="w-16 text-sky-500" />
           </i>
           <div className="flex flex-col">
-            <span className="text-gray-800 text-4xl font-bold">
-              #{isValidating ? "loading..." : stats?.myRank}
-            </span>
             <p className="text-gray-500">Global rank</p>
+            {isValidating ? (
+              <div className="w-full pr-4 mt-1">
+                <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>
+              </div>
+            ) : (
+              <span className="text-gray-800 text-4xl font-bold">#{stats?.myRank}</span>
+            )}
           </div>
         </div>
       </div>
@@ -76,7 +88,7 @@ const Home = () => {
         </i>
         <h3 className="text-gray-400">Create a task and send it to a friend</h3>
         <button
-          className="flex items-center gap-1 px-3 py-2 mt-4 bg-sky-500 hover:bg-sky-600 focus:ring-2 
+          className="flex items-center gap-1 px-3 py-2 my-4 bg-sky-500 hover:bg-sky-600 focus:ring-2 
         focus:ring-sky-600 focus:ring-offset-2 text-white rounded transition"
           onClick={() => router.replace("/create-task")}
         >

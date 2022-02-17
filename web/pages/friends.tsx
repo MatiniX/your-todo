@@ -23,7 +23,7 @@ const Friends = () => {
       <div className="flex items-center">
         <h1 className="page-header">Friends</h1>
         <button
-          className="ml-auto mr-8 px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500  transition"
+          className="ml-auto md:mr-8 px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500  transition"
           onClick={() => {
             setSendFriendRequestOpen(true);
           }}
@@ -39,7 +39,7 @@ const Friends = () => {
         </div>
       ) : friends!.length > 0 ? (
         <>
-          <div className="flex flex-wrap gap-4 mt-4">
+          <div className="flex flex-col md:flex-row items-center md:items-start flex-wrap gap-4 mt-4">
             {friends
               ? friends.map((friend) => (
                   <FriendCard

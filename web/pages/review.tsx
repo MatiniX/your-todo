@@ -18,7 +18,7 @@ const Review = () => {
           <LoadingSpinner />
         </div>
       ) : hasTasks ? (
-        <div className="grid grid-cols-3 mt-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 mt-4 gap-4">
           {tasks?.map((task) => (
             <ReviewTask
               key={task.id}
@@ -32,7 +32,9 @@ const Review = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center mt-32">
-          <h3 className="text-gray-800 text-2xl">Looks like there are no tasks to review.</h3>
+          <h3 className="text-gray-800 text-2xl text-center">
+            Looks like there are no tasks to review.
+          </h3>
           <h4 className="text-gray-400">Send some tasks to your friends!</h4>
           <button
             className="flex items-center gap-1 px-3 py-2 mt-4 bg-sky-500 hover:bg-sky-600 focus:ring-2 

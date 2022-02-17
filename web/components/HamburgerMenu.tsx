@@ -16,7 +16,6 @@ import SideNavLink from "./SideNavLink";
 interface MobileNavLinkProps extends React.ComponentPropsWithoutRef<"a"> {
   to: string;
   icon: JSX.Element;
-  children: React.ReactNode;
 }
 
 const MobileNavLink = ({ to, icon, children, ...rest }: MobileNavLinkProps) => {

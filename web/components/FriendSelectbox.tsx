@@ -31,7 +31,7 @@ const FriendSelectbox = ({ name }: FriendSelectboxProps) => {
       <label htmlFor="friendSelect" className="block text-lg font-medium text-gray-700">
         Send To:
       </label>
-      <div className="w-72">
+      <div className="w-full md:w-72">
         <Listbox value={selectedPerson} onChange={setSelectedPerson}>
           <div className="relative mt-1">
             <Listbox.Button
@@ -51,7 +51,7 @@ const FriendSelectbox = ({ name }: FriendSelectboxProps) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
                 {friends?.map((friend, friendIdx) => (
                   <Listbox.Option
                     key={friendIdx}
