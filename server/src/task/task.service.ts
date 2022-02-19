@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Task, TaskDifficulty, TaskState } from 'src/entities/Task';
-import { User } from 'src/entities/User';
+import { Task, TaskDifficulty, TaskState } from 'src/entities/Task.entity';
+import { User } from 'src/entities/User.entity';
 import { NotificationService } from 'src/services/notification.service';
 import { getConnection } from 'typeorm';
 import { CreateTaskDto } from './models/create-task.dto';

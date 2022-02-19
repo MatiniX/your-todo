@@ -10,9 +10,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { FriendRequest } from './FriendRequest';
-import { Task } from './Task';
-import { Notification } from './Notification';
+import { FriendRequest } from './FriendRequest.entity';
+import { Task } from './Task.entity';
+import { Notification } from './Notification.entity';
 
 @Entity()
 export class User extends BaseEntity {

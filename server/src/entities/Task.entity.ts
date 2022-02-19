@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './User';
+import { User } from './User.entity';
 
 export enum TaskState {
   AWAITING_COMPLETION = 'awaiting',

@@ -1,4 +1,4 @@
-import { TaskDifficulty } from 'src/entities/Task';
+import { TaskDifficulty } from 'src/entities/Task.entity';
 
 export class CreateTaskDto {
   title: string;

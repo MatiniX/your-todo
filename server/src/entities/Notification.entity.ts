@@ -8,9 +8,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { FriendRequest } from './FriendRequest';
-import { Task } from './Task';
-import { User } from './User';
+import { FriendRequest } from './FriendRequest.entity';
+import { Task } from './Task.entity';
+import { User } from './User.entity';
 
 export enum NotificationType {
   NEW_FRIEND_REQUEST = 'new_friend_request',

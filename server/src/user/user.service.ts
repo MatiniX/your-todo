@@ -1,10 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from 'src/entities/User';
+import { User } from 'src/entities/User.entity';
 import * as argon2 from 'argon2';
-import { FriendRequest, FriendRequestState } from 'src/entities/FriendRequest';
+import {
+  FriendRequest,
+  FriendRequestState,
+} from 'src/entities/FriendRequest.entity';
 import { getConnection } from 'typeorm';
 import { NotificationService } from 'src/services/notification.service';
-import { Task, TaskState } from 'src/entities/Task';
+import { Task, TaskState } from 'src/entities/Task.entity';
 
 @Injectable()
 export class UserService {

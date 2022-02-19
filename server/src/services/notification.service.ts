@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { FriendRequest } from 'src/entities/FriendRequest';
-import { Notification, NotificationType } from 'src/entities/Notification';
-import { Task } from 'src/entities/Task';
-import { User } from 'src/entities/User';
+import { FriendRequest } from 'src/entities/FriendRequest.entity';
+import {
+  Notification,
+  NotificationType,
+} from 'src/entities/Notification.entity';
+import { Task } from 'src/entities/Task.entity';
+import { User } from 'src/entities/User.entity';
 
 @Injectable()
 export class NotificationService {
