@@ -9,8 +9,8 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: configService.get('CORS_ORIGIN'),
+    origin: false, //configService.get('CORS_ORIGIN'),
   });
-  await app.listen(configService.get('PORT'));
+  await app.listen(process.env.PORT || configService.get('PORT'));
 }
 bootstrap();
