@@ -1,0 +1,10 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "postgres",
+  "database": "your-todo-schema",
+  "entities": ["dist/src/entities/*.entity.js"],
+  "migrations": ["dist/src/migrations/*.js"]
+}

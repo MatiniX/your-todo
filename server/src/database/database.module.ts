@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { __prod__ } from 'src/constants';
 
 @Module({
   imports: [
@@ -9,14 +10,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USERNAME'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DATABASE'),
+        url: configService.get('DATABASE_URL'),
         entities: [__dirname + '/../**/*.entity.js'],
-        synchronize: true,
-        logging: true,
+        synchronize: !__prod__,
+        logging: !__prod__,
+        migrations: [__dirname + '/migrations/*.js'],
+        migrationsRun: __prod__,
       }),
     }),
   ],
