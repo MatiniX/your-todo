@@ -16,9 +16,6 @@ import { __prod__ } from 'src/constants';
         logging: !__prod__,
         migrations: [__dirname + '/migrations/*.js'],
         migrationsRun: __prod__,
-        ssl: {
-          rejectUnauthorized: false,
-        },
       }),
     }),
   ],
