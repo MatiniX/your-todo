@@ -12,7 +12,7 @@ async function bootstrap() {
   app.set('trust proxy', 1);
   app.enableCors({
     credentials: true,
-    origin: configService.get('CORS_ORIGIN'),
+    origin: false, //configService.get('CORS_ORIGIN'),
   });
   await app.listen(process.env.PORT || configService.get('PORT'));
 }
