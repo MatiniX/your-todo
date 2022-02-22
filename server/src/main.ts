@@ -1,6 +1,5 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
 import { __prod__ } from './constants';
 

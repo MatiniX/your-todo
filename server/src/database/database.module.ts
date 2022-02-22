@@ -14,11 +14,6 @@ import { __prod__ } from 'src/constants';
         entities: [__dirname + '/../**/*.entity.js'],
         synchronize: !__prod__,
         logging: true,
-        migrations: [__dirname + '/migrations/*.js'],
-        migrationsRun: true,
-        cli: {
-          migrationsDir: __dirname + '/migrations',
-        },
       }),
     }),
   ],
