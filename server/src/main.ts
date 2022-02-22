@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { getConnection } from 'typeorm';
 import { AppModule } from './app.module';
 import { __prod__ } from './constants';
 
@@ -8,9 +9,11 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  console.log('db url', configService.get('DATABASE_URL'));
-  console.log('redis url', configService.get('REDIS_URL'));
-  console.log('prod', __prod__);
+  // run migrations when in production
+  if (__prod__) {
+    const connection = getConnection();
+    connection.runMigrations();
+  }
 
   app.enableCors({
     credentials: true,
