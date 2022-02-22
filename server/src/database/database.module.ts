@@ -13,7 +13,7 @@ import { __prod__ } from 'src/constants';
         url: configService.get('DATABASE_URL'),
         entities: [__dirname + '/../**/*.entity.js'],
         synchronize: !__prod__,
-        logging: true,
+        logging: !__prod__,
       }),
     }),
   ],

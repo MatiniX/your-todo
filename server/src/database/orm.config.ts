@@ -4,9 +4,6 @@ export const typeOrmModuleOptions: TypeOrmModuleOptions = {
   type: 'postgres',
   url: process.env.DATABASE_URL,
   entities: [__dirname + '/../**/entities/*.entity.{ts,js}'],
-  /* Note : it is unsafe to use synchronize: true for schema synchronization
-    on production once you get data in your database. */
-  // synchronize: true,
   autoLoadEntities: true,
 };
 
@@ -19,3 +16,10 @@ export const OrmConfig = {
   },
 };
 export default OrmConfig;
+
+/**
+ * Postuup pre používanie migracii:
+ * 1. vygenerovať migráciu v dev prostredí
+ * 2. pushnúť zmeny a migráciu na main
+ * 3. cez bash zadať príkaz npm typeorm migration:run
+ */
