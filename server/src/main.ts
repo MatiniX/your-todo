@@ -9,12 +9,6 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  // run migrations when in production
-  if (__prod__) {
-    const connection = getConnection();
-    connection.runMigrations();
-  }
-
   app.enableCors({
     credentials: true,
     origin: false, //configService.get('CORS_ORIGIN'),

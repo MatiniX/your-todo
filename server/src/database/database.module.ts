@@ -13,9 +13,9 @@ import { __prod__ } from 'src/constants';
         url: configService.get('DATABASE_URL'),
         entities: [__dirname + '/../**/*.entity.js'],
         synchronize: !__prod__,
-        logging: !__prod__,
+        logging: true,
         migrations: [__dirname + '/migrations/*.js'],
-        migrationsRun: __prod__,
+        migrationsRun: true,
         cli: {
           migrationsDir: 'migrations',
         },
