@@ -17,7 +17,7 @@ import { __prod__ } from 'src/constants';
         migrations: [__dirname + '/migrations/*.js'],
         migrationsRun: true,
         cli: {
-          migrationsDir: 'migrations',
+          migrationsDir: __dirname + '/migrations',
         },
       }),
     }),
