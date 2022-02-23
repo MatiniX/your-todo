@@ -16,7 +16,7 @@ import { sendEmail } from 'src/utils/sendEmail';
 import { validateEmail } from 'src/utils/validateEmail';
 import { validatePassword } from 'src/utils/validatePassword';
 
-class FieldError {
+export class FieldError {
   constructor(public field: string, public message: string) {}
 }
 

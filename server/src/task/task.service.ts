@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { FieldError } from 'src/auth/auth.service';
 import { Task, TaskDifficulty, TaskState } from 'src/entities/Task.entity';
 import { User } from 'src/entities/User.entity';
 import { NotificationService } from 'src/services/notification.service';
@@ -224,6 +225,12 @@ export class TaskService {
       throw new BadRequestException("You can't send task to yourself!");
     }
 
+    if (task.title.length > 100) {
+      throw new BadRequestException(
+        new FieldError('title', 'Title can be 100 characters max!'),
+      );
+    }
+
     const newTask = new Task();
     const fromUser = await User.findOne(task.fromUserId, {
       select: ['id', 'username'],
@@ -242,21 +249,24 @@ export class TaskService {
       );
     }
 
-    // ODKOMENTOVAŤ
-    // const existingTask = await Task.findOne({
-    //   where: { toUserId: toUser.id, fromUserId: fromUser.id },
-    // });
-    // if (existingTask) {
-    //   // prettier-ignore
-    //   const existingTaskCreateDate = existingTask.createdAt.setHours(0, 0, 0, 0);
-    //   const newTaskCreateDate = new Date().setHours(0, 0, 0, 0);
+    // skontroluje či neposielame viac ako 1 task denne tomu istému používateľovi
+    const existingTask = await Task.find({
+      where: { toUserId: toUser.id, fromUserId: fromUser.id },
+      order: { createdAt: 'DESC' },
+      take: 1,
+    });
 
-    //   if (existingTaskCreateDate === newTaskCreateDate) {
-    //     throw new BadRequestException(
-    //       'You only set one task per day for your friend ;)',
-    //     );
-    //   }
-    // }
+    if (existingTask.length) {
+      // prettier-ignore
+      const existingTaskCreateDate = existingTask[0].createdAt.setHours(0, 0, 0, 0);
+      const newTaskCreateDate = new Date().setHours(0, 0, 0, 0);
+
+      if (existingTaskCreateDate === newTaskCreateDate) {
+        throw new BadRequestException(
+          'You only set one task per day for your friend ;)',
+        );
+      }
+    }
 
     newTask.title = task.title;
     newTask.fromUser = fromUser;
