@@ -7,6 +7,7 @@ import { login, register } from "../utils/auth";
 import Router from "next/router";
 import axios from "axios";
 import useUser from "../data/useUser";
+import Head from "next/head";
 
 const Register = () => {
   const { user, loggedOut, mutate } = useUser();
@@ -19,6 +20,9 @@ const Register = () => {
 
   return (
     <main className="py-8 px-6 lg:px-8 min-h-screen bg-gray-50 flex flex-col justify-center">
+      <Head>
+        <title>Create Account</title>
+      </Head>
       <Formik
         initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
         validationSchema={Yup.object({

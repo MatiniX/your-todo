@@ -1,15 +1,15 @@
-import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment } from "react";
+import { Transition, Dialog } from "@headlessui/react";
+import React, { Fragment, SetStateAction } from "react";
+import useUser from "../data/useUser";
+import { logout } from "../utils/auth";
 
-interface InfoDialogProps {
-  title: string;
-  text: string;
-  closeMessage: string;
+interface ConfirmLogoutProps {
   open: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const InfoDialog = ({ title, text, closeMessage, open, setIsOpen }: InfoDialogProps) => {
+const ConfirmLogout = ({ open, setIsOpen }: ConfirmLogoutProps) => {
+  const { mutate } = useUser();
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
@@ -45,19 +45,26 @@ const InfoDialog = ({ title, text, closeMessage, open, setIsOpen }: InfoDialogPr
           >
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                {title}
+                Do you want to log out?
               </Dialog.Title>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">{text}</p>
-              </div>
 
-              <div className="mt-4">
+              <div className="mt-4 flex justify-end gap-2">
                 <button
                   type="button"
-                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-sky-900 bg-sky-100 border border-transparent rounded-md hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500"
+                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-red-900 bg-red-100 border border-transparent rounded-md hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
                   onClick={() => setIsOpen(false)}
                 >
-                  {closeMessage}
+                  No
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-green-900 bg-green-100 border border-transparent rounded-md hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                  onClick={async () => {
+                    await logout();
+                    mutate();
+                  }}
+                >
+                  Yes
                 </button>
               </div>
             </div>
@@ -68,4 +75,4 @@ const InfoDialog = ({ title, text, closeMessage, open, setIsOpen }: InfoDialogPr
   );
 };
 
-export default InfoDialog;
+export default ConfirmLogout;

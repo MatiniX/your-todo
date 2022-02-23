@@ -1,4 +1,5 @@
 import { MailIcon } from "@heroicons/react/outline";
+import Head from "next/head";
 import React, { ReactElement, useEffect, useState } from "react";
 import FriendCard from "../components/FriendCard";
 import FriendDetails from "../components/FriendDetails";
@@ -20,6 +21,9 @@ const Friends = () => {
 
   return (
     <>
+      <Head>
+        <title>Friends</title>
+      </Head>
       <div className="flex items-center">
         <h1 className="page-header">Friends</h1>
         <button

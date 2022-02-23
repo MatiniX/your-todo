@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React, { ReactElement, useState } from "react";
 import Layout from "../components/Layout";
 import Leaderboard from "../components/Leaderboard";
@@ -12,6 +13,9 @@ const LeaderboardPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Leaderboard</title>
+      </Head>
       <h1 className="page-header text-center">Leaderboard</h1>
       <div className="mt-4">
         {isLoading ? (

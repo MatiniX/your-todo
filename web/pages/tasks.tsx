@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React, { ReactElement, useState } from "react";
 import CompleteTaskAlert from "../components/CompleteTaskAlert";
 import ErrorDialog from "../components/ErrorDialog";
@@ -65,6 +66,9 @@ const Tasks = () => {
       )}
       {hasTasks && (
         <>
+          <Head>
+            <title>My Tasks</title>
+          </Head>
           <TaskDetailsModal
             isOpen={detailsOpen}
             setIsOpen={setDetailsOpen}

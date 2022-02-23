@@ -7,6 +7,7 @@ import useUser from "../data/useUser";
 import Router from "next/router";
 import { login } from "../utils/auth";
 import axios from "axios";
+import Head from "next/head";
 
 const Login = () => {
   const { user, loggedOut, mutate } = useUser();
@@ -19,17 +20,19 @@ const Login = () => {
 
   return (
     <main className="py-12 px-6 lg:px-8 min-h-screen bg-gray-50 flex flex-col justify-center">
+      <Head>
+        <title>Log In</title>
+      </Head>
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         validationSchema={Yup.object({
           usernameOrEmail: Yup.string().required("Provide email or username"),
           password: Yup.string().required("Required"),
         })}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
+        onSubmit={async (values, { setErrors }) => {
           try {
             await login(values.usernameOrEmail, values.password);
-            mutate();
-            setSubmitting(false);
+            await mutate();
           } catch (error) {
             if (axios.isAxiosError(error)) {
               const { field, message } = error.response?.data;

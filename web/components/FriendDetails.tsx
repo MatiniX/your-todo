@@ -46,7 +46,7 @@ const FriendDetails = ({ isOpen, setIsOpen, removeFriend, id }: FriendDetailsPro
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="relative flex flex-col w-1/3 h-[50vh] mx-auto px-8 py-4 bg-white rounded">
+            <div className="relative flex flex-col w-11/12 md:w-1/3 h-[50vh] mx-auto px-8 py-4 bg-white rounded">
               <button
                 className="absolute top-2 right-2 w-6 text-gray-500"
                 onClick={() => setIsOpen(false)}

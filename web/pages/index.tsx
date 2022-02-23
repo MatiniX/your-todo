@@ -5,8 +5,9 @@ import {
   PencilAltIcon,
   PlusIcon,
 } from "@heroicons/react/solid";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import Layout from "../components/Layout";
 import { useIndexStats } from "../data/useIndexStats";
 import useUser from "../data/useUser";
@@ -15,12 +16,19 @@ const Home = () => {
   const { stats, isValidating, error } = useIndexStats();
   const { user, loading } = useUser();
 
+  useEffect(() => {
+    console.log(document.cookie);
+  }, []);
+
   const router = useRouter();
 
   return (
     <>
+      <Head>
+        <title>Home</title>
+      </Head>
       <h1 className="mt-4 text-center text-4xl text-gray-800 font-bold">
-        Welcome back {loading ? "" : user.username}
+        Welcome back {loading ? "" : user!.username}
       </h1>
       <div className="flex flex-col md:flex-row justify-center gap-8 mt-16">
         <div

@@ -1,4 +1,5 @@
 import { FolderAddIcon, PlusIcon } from "@heroicons/react/solid";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactElement } from "react";
 import Layout from "../components/Layout";
@@ -12,6 +13,9 @@ const Review = () => {
 
   return (
     <>
+      <Head>
+        <title>Review Tasks</title>
+      </Head>
       <h1 className="page-header">Review</h1>
       {isLoading ? (
         <div className="w-16 h-16 mx-auto mt-32">

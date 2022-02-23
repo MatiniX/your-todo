@@ -4,12 +4,16 @@ import NextLink from "next/link";
 import InputField from "../components/InputField";
 import * as Yup from "yup";
 import { forgotPassword } from "../utils/auth";
+import Head from "next/head";
 
 const ForgotPassword = () => {
   const [complete, setComplete] = useState(false);
 
   return (
     <main className="py-12 px-6 lg:px-8 min-h-screen bg-gray-50 flex flex-col justify-center">
+      <Head>
+        <title>Forgot Password</title>
+      </Head>
       <Formik
         initialValues={{ email: "" }}
         validationSchema={Yup.object({

@@ -2,6 +2,7 @@ import axios from "axios";
 import { Form, Formik } from "formik";
 import React, { ReactElement, useState } from "react";
 import * as Yup from "yup";
+import Head from "next/head";
 import ErrorDialog from "../components/ErrorDialog";
 import InfoDialog from "../components/InfoDialog";
 import InputField from "../components/InputField";
@@ -20,6 +21,9 @@ const CreateTask = () => {
 
   return (
     <>
+      <Head>
+        <title>Create Task</title>
+      </Head>
       <h1 className="page-header">Create Task</h1>
       <Formik
         initialValues={{ title: "", description: "", to: -1, difficulty: "easy" }}
@@ -42,7 +46,9 @@ const CreateTask = () => {
           setDialogOpen(true);
         }}
         validationSchema={Yup.object({
-          title: Yup.string().required("Title is required!"),
+          title: Yup.string()
+            .max(100, "Title can be 100 characters max!")
+            .required("Title is required!"),
           to: Yup.number().positive("Select a friend!"),
           difficulty: Yup.string().oneOf(["easy", "medium", "hard"]),
         })}

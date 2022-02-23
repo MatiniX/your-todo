@@ -1,4 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
+import Head from "next/head";
 import ArchivedTaskCard from "../components/ArchivedTaskCard";
 import Layout from "../components/Layout";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -20,6 +21,9 @@ const Archive = () => {
 
   return (
     <div className="flex flex-col h-full">
+      <Head>
+        <title>Archive</title>
+      </Head>
       <h1 className="page-header flex-initial">Archive</h1>
       <div>
         {isLoadingInitialData ? (

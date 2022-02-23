@@ -29,7 +29,7 @@ const ReviewTask = ({ id, title, username, completedOn }: ReviewTaskProps) => {
 
       <div className="flex divide-x-2 text-gray-500">
         <button
-          className="flex flex-1 py-2 justify-center hover:text-red-800 hover:bg-red-100"
+          className="flex flex-1 py-2 justify-center hover:text-red-800 hover:bg-red-100 transition"
           onClick={async () => {
             // Update local data without revalidation
             mutate(
@@ -45,7 +45,7 @@ const ReviewTask = ({ id, title, username, completedOn }: ReviewTaskProps) => {
           <p className="font-medium">Reject</p>
         </button>
         <button
-          className="flex flex-1 py-2 justify-center hover:text-green-800 hover:bg-green-100"
+          className="flex flex-1 py-2 justify-center hover:text-green-800 hover:bg-green-100 transition"
           onClick={async () => {
             mutate(
               tasks?.filter((task) => task.id != id),

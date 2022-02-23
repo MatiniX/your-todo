@@ -11,6 +11,7 @@ import {
 import StatCard from "../components/StatCard";
 import { useUserDetails } from "../data/useUserDetails";
 import { useUserStats } from "../data/useUserStats";
+import Head from "next/head";
 
 const Profile = () => {
   const { userDetails, isLoading: loadingUserDetails } = useUserDetails();
@@ -18,6 +19,9 @@ const Profile = () => {
 
   return (
     <>
+      <Head>
+        <title>Profile</title>
+      </Head>
       <h1 className="page-header mb-8">Your Profile</h1>
       <div className="pb-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
