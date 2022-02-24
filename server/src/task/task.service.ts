@@ -182,7 +182,7 @@ export class TaskService {
         .leftJoinAndSelect('task.fromUser', 'fromUser')
         .where('task.toUser = :toUserId', { toUserId })
         .andWhere(
-          'task.taskState = :unfulfilled or task.taskState = :fulfilled',
+          '(task.taskState = :unfulfilled or task.taskState = :fulfilled)',
           {
             unfulfilled: TaskState.UNFULFILLED,
             fulfilled: TaskState.FULFILLED,
@@ -203,6 +203,8 @@ export class TaskService {
         .limit(limitPlusOne)
         .getMany();
     }
+
+    console.log(tasks);
 
     return {
       tasks: tasks.slice(0, limit),

@@ -126,13 +126,13 @@ export class AuthService {
     const key = FORGET_PASSWORD_PREFIX + token;
     const userId = await this.redis.get(key);
     if (!userId) {
-      throw new BadRequestException('Your token is expired!');
+      throw new BadRequestException('Your token has expired!');
     }
 
     validatePassword(newPassword);
 
     const id = Number(userId);
-    const user = this.userService.findByIdFull(id);
+    const user = this.userService.findById(id);
     if (!user) {
       throw new BadRequestException('User no longer exists!');
     }

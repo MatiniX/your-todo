@@ -14,6 +14,7 @@ async function bootstrap() {
     credentials: true,
     origin: configService.get('CORS_ORIGIN'),
   });
+
   await app.listen(process.env.PORT || configService.get('PORT'));
 }
 bootstrap();

@@ -32,7 +32,7 @@ const Archive = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 justify-items-center gap-4 mt-4 py-4 overflow-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 justify-items-center gap-4 mt-4 py-4 overflow-hidden">
               {allTasks?.map((task, index) => (
                 <ArchivedTaskCard
                   key={task.id}

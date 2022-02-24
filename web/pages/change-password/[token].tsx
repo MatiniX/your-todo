@@ -4,6 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/InputField";
 import { changePassword } from "../../utils/auth";
+import axios from "axios";
 
 const ChangePassword = () => {
   const router = useRouter();
@@ -19,12 +20,14 @@ const ChangePassword = () => {
             .required("Required"),
           confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
         })}
-        onSubmit={async (values) => {
+        onSubmit={async (values, actions) => {
           try {
             await changePassword(token as string, values.password);
             router.replace("/login");
           } catch (error) {
-            console.log(error);
+            if (axios.isAxiosError(error)) {
+              actions.setErrors({ password: error.response?.data.message });
+            }
           }
         }}
       >
@@ -43,7 +46,7 @@ const ChangePassword = () => {
                   <button
                     type="submit"
                     disabled={formik.isSubmitting}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                   >
                     {formik.isSubmitting ? "Changing..." : "Change"}
                   </button>

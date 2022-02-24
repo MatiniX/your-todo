@@ -55,9 +55,9 @@ export class AuthController {
   logout(@Req() req, @Res() res: Response) {
     // Odhlasi uživateľa, vymaže session cookie a zruší session medzi serverom a uživateľom
     req.logout();
-    res.status(200).clearCookie('connect.sid');
+    res.clearCookie('connect.sid');
     req.session.destroy();
 
-    res.send(true);
+    res.status(200).send(true);
   }
 }
