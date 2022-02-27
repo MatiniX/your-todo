@@ -29,7 +29,7 @@ export async function sendEmail(to: string, html: string) {
 
   // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: 'your-todo-app', // sender address
+    from: 'your-todo-app <yourtodo@foo.com>', // sender address
     to: to,
     subject: 'Change password', // Subject line
     html: html,
