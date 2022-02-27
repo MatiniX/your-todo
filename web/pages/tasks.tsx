@@ -19,6 +19,9 @@ const Tasks = () => {
 
   return (
     <>
+      <Head>
+        <title>My Tasks</title>
+      </Head>
       <h1 className="page-header">Your Tasks</h1>
 
       {isLoading ? (
@@ -66,9 +69,6 @@ const Tasks = () => {
       )}
       {hasTasks && (
         <>
-          <Head>
-            <title>My Tasks</title>
-          </Head>
           <TaskDetailsModal
             isOpen={detailsOpen}
             setIsOpen={setDetailsOpen}
