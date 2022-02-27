@@ -15,6 +15,7 @@ import { FORGET_PASSWORD_PREFIX } from 'src/constants';
 import { sendEmail } from 'src/utils/sendEmail';
 import { validateEmail } from 'src/utils/validateEmail';
 import { validatePassword } from 'src/utils/validatePassword';
+import { ConfigService } from '@nestjs/config';
 
 export class FieldError {
   constructor(public field: string, public message: string) {}
@@ -24,6 +25,7 @@ export class FieldError {
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
     @Inject(REDIS) private readonly redis: Redis,
   ) {}
 
@@ -115,9 +117,12 @@ export class AuthService {
       'ex',
       1000 * 60 * 60 * 24,
     );
+
+    const domain = this.configService.get('DOMAIN');
+
     await sendEmail(
       email,
-      `<p>Click <a href=http://localhost:3000/change-password/${token}>here</a> to change your password.</p>`,
+      `<p>Click <a href=${domain}/change-password/${token}>here</a> to change your password.</p>`,
     );
     return true;
   }
