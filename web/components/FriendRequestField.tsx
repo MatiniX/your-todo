@@ -11,7 +11,7 @@ interface FriendRequestFieldProps {
 const FriendRequestField = ({ id, username }: FriendRequestFieldProps) => {
   return (
     <div className="flex items-center py-2">
-      <h6 className="text-lg text-gray-800 font-medium">{username} wants to be your friend</h6>
+      <h6 className="text-lg text-gray-800 font-medium">{username} wants to be your friend.</h6>
       <div className="flex gap-1 ml-auto">
         <button
           className="text-green-500 hover:text-green-600"

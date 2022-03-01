@@ -36,7 +36,6 @@ const MobileNavLink = ({ to, icon, children, ...rest }: MobileNavLinkProps) => {
 const HamburgerMenu = () => {
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const { mutate } = useUser();
   return (
     <>
       <Menu as="div" className="relative">
@@ -46,7 +45,7 @@ const HamburgerMenu = () => {
         <Menu.Items className="absolute flex flex-col right-0 w-screen mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1">
             <Menu.Item>
-              {({ active }) => (
+              {() => (
                 <MobileNavLink to="/tasks" icon={<ClipboardListIcon className="w-8" />}>
                   Tasks
                 </MobileNavLink>

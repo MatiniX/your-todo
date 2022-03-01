@@ -48,7 +48,7 @@ const TopNav = () => {
                       Mark as seen
                     </button>
                   ) : (
-                    <p className="text-center p-2 -m-3">No new notifications</p>
+                    <p className="text-center p-2 -m-3">No new notifications.</p>
                   )}
                 </div>
               </div>

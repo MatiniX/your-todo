@@ -17,6 +17,8 @@ const Tasks = () => {
 
   const { allTasks, hasTasks, isLoading, error } = useTasksToComplete();
 
+  console.log(new Date());
+
   return (
     <>
       <Head>
@@ -36,9 +38,11 @@ const Tasks = () => {
 
               return (
                 <div className="mb-2" key={idx}>
-                  <h2 className="my-2 text-lg font-medium text-gray-500">{date}</h2>
+                  <h2 className="my-2 text-lg font-medium text-gray-500">
+                    {new Date(date).toLocaleDateString()}
+                  </h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {tasks.map((task, idx) => (
+                    {tasks.map((task) => (
                       <SingleTask
                         key={task.id}
                         task={task}

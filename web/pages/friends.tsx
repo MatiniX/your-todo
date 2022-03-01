@@ -87,7 +87,7 @@ const Friends = () => {
             Looks like you don&apos;t have friends!
           </h1>
           <button
-            className="ml-auto mr-8 px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition"
+            className="ml-auto px-3 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition"
             onClick={() => {
               setSendFriendRequestOpen(true);
             }}

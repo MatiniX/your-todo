@@ -10,7 +10,7 @@ interface UserDetailsProps {
 }
 
 const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
-  const { userInfo, isValidating, isLoading, error, mutate } = useUserInfo(id);
+  const { userInfo, isLoading, mutate } = useUserInfo(id);
 
   useEffect(() => {
     mutate();
@@ -77,7 +77,7 @@ const UserDetails = ({ id, isOpen, setIsOpen }: UserDetailsProps) => {
                   )}
                 </div>
                 <div>
-                  <h3 className="text-gray-500 text-lg">Memebr since:</h3>
+                  <h3 className="text-gray-500 text-lg">Member since:</h3>
                   {isLoading ? (
                     <div className="w-full pr-4">
                       <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>

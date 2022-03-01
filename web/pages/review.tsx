@@ -1,4 +1,4 @@
-import { FolderAddIcon, PlusIcon } from "@heroicons/react/solid";
+import { PlusIcon } from "@heroicons/react/solid";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ReactElement } from "react";

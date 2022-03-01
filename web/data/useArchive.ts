@@ -1,5 +1,4 @@
 import { AxiosError } from "axios";
-import useSWR from "swr";
 import axiosInstance from "../utils/axiosInstance";
 import { Task } from "./interfaces/Task";
 import useSWRInfinite from "swr/infinite";
@@ -10,8 +9,6 @@ interface PaginatedTasks {
 }
 
 const getKey = (index: any, previousPageData: any) => {
-  console.log({ index, previousPageData });
-
   // reached the end
   if (previousPageData && !previousPageData.hasMore) return null;
 
@@ -31,11 +28,12 @@ const useArchive = () => {
       const response = await axiosInstance.get(url);
       return response.data;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   });
 
-  // tento trik spraví jednu array so všetkými taskami z data v ktorej sú taksky separátne spolu s hasMore property
+  // tento trik spraví jednu array so všetkými taskami z data v ktorej sú tasky separátne spolu s hasMore property
   const allTasks: Task[] = data ? new Array<Task>().concat(...data.map((d) => d.tasks)) : [];
 
   const isLoadingInitialData = !data && !error;

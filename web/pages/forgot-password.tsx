@@ -31,7 +31,7 @@ const ForgotPassword = () => {
               <p>
                 Return to{" "}
                 <NextLink href="/login">
-                  <a className="font-medium text-blue-600 hover:text-blue-500 hover:underline">
+                  <a className="font-medium text-sky-600 hover:text-sky-500 hover:underline">
                     Log in.
                   </a>
                 </NextLink>

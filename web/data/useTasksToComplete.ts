@@ -4,7 +4,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { Task } from "./interfaces/Task";
 
 interface TasksToComplete {
-  date: string;
+  date: number;
   tasks: Task[];
 }
 

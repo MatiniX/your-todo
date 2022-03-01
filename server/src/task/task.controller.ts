@@ -76,7 +76,6 @@ export class TaskController {
 
   @Patch('complete/:id')
   markTaskComplete(@Param('id', new ParseIntPipe()) id) {
-    //throw new BadRequestException('Something went wrong'); // iba na testovanie!
     return this.taskService.setForReview(id);
   }
 

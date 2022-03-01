@@ -1,7 +1,6 @@
 import React from "react";
 import { CheckIcon, XIcon } from "@heroicons/react/outline";
 import axiosInstance from "../utils/axiosInstance";
-import { KeyedMutator, mutate } from "swr";
 import useTasksForReview from "../data/useTasksForReview";
 
 interface ReviewTaskProps {

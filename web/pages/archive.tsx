@@ -6,11 +6,14 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import TaskDetailsModal from "../components/TaskDetailsModal";
 import { Task } from "../data/interfaces/Task";
 import { useArchive } from "../data/useArchive";
+import ErrorDialog from "../components/ErrorDialog";
 
 const Archive = () => {
-  const { allTasks, setSize, size, hasMore, isLoadingMore, isLoadingInitialData } = useArchive();
+  const { allTasks, setSize, size, hasMore, isLoadingMore, isLoadingInitialData, error } =
+    useArchive();
 
   const [taskDetailOpen, setTaskDetailOpen] = useState(false);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [selectedTaskIdx, setSelectedTaskIdx] = useState(0);
   const [selectedTask, setselectedTask] = useState<Task>();
   useEffect(() => {
@@ -18,6 +21,12 @@ const Archive = () => {
       setselectedTask(allTasks[selectedTaskIdx]);
     }
   }, [selectedTaskIdx, allTasks]);
+
+  useEffect(() => {
+    if (error) {
+      setErrorDialogOpen(true);
+    }
+  }, [error]);
 
   return (
     <div className="flex flex-col h-full">
@@ -62,7 +71,14 @@ const Archive = () => {
         isOpen={taskDetailOpen}
         setIsOpen={setTaskDetailOpen}
         task={selectedTask}
-        openErrorDialog={() => {}}
+        openErrorDialog={setErrorDialogOpen}
+      />
+      <ErrorDialog
+        closeMessage="Close"
+        title="Error while fetching data."
+        text="There was an error while requesting data."
+        open={errorDialogOpen}
+        setIsOpen={setErrorDialogOpen}
       />
     </div>
   );

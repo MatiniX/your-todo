@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Task } from "../data/interfaces/Task";
 import { useTasksToComplete } from "../data/useTasksToComplete";
 import axiosInstance from "../utils/axiosInstance";

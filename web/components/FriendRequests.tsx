@@ -9,7 +9,7 @@ interface FriendRequestsProps {
 }
 
 const FriendRequests = ({ isOpen, setIsOpen }: FriendRequestsProps) => {
-  const { friendRequests, hasRequest, error, isValidating, mutate } = useFriendRequests();
+  const { friendRequests, hasRequest } = useFriendRequests();
 
   useEffect(() => {
     if (!hasRequest) setIsOpen(false);

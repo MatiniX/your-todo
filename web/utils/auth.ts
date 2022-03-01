@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import axiosInstance from "./axiosInstance";
 
 interface RegisterData {
@@ -24,14 +23,14 @@ export const logout = async () => {
     return response.status === 200;
   } catch (error) {
     // Error handling
-    console.log(error);
+    throw error;
   }
 };
 
 export const register = async (registerData: RegisterData) => {
   try {
     const response = await axiosInstance.post("auth/register", registerData);
-    return { username: registerData.username, password: registerData.password };
+    response.data;
   } catch (error) {
     throw error;
   }

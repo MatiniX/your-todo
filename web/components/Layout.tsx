@@ -10,7 +10,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { loggedOut, loading } = useUser();
+  const { loggedOut } = useUser();
 
   useEffect(() => {
     if (loggedOut) {

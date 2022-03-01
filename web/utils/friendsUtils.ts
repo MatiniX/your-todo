@@ -1,4 +1,3 @@
-import { mutate } from "swr";
 import axiosInstance from "./axiosInstance";
 
 const removeFriend = async (friendId: number) => {};

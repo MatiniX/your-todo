@@ -76,7 +76,7 @@ const FriendDetails = ({ isOpen, setIsOpen, removeFriend, id }: FriendDetailsPro
                   )}
                 </div>
                 <div>
-                  <h3 className="text-gray-500 text-lg">Memebr since:</h3>
+                  <h3 className="text-gray-500 text-lg">Member since:</h3>
                   {isLoading ? (
                     <div className="w-full pr-4">
                       <div className="animate-pulse w-full h-6 bg-gray-300 rounded"></div>

@@ -59,12 +59,13 @@ export class TaskService {
 
     // Vytvorí set dátumov vo formate "dd.mm.yyyy"
     const allDates = new Set(
-      allTasks.map((task) =>
-        task.createdAt.toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'numeric',
-          day: 'numeric',
-        }),
+      allTasks.map(
+        (task) => task.createdAt.setHours(0, 0, 0, 0),
+        // task.createdAt.toLocaleDateString(undefined, {
+        //   year: 'numeric',
+        //   month: 'numeric',
+        //   day: 'numeric',
+        // }),
       ),
     );
 
@@ -74,12 +75,7 @@ export class TaskService {
       const dailyTasks = {
         date,
         tasks: allTasks.filter(
-          (task) =>
-            task.createdAt.toLocaleDateString(undefined, {
-              year: 'numeric',
-              month: 'numeric',
-              day: 'numeric',
-            }) === date,
+          (task) => task.createdAt.setHours(0, 0, 0, 0) === date,
         ),
       };
       retTask.push(dailyTasks);
@@ -203,8 +199,6 @@ export class TaskService {
         .limit(limitPlusOne)
         .getMany();
     }
-
-    console.log(tasks);
 
     return {
       tasks: tasks.slice(0, limit),
