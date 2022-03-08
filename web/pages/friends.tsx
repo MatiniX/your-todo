@@ -19,6 +19,8 @@ const Friends = () => {
   const [friendRequestsOpen, setFriendRequestsOpen] = useState(false);
   const { hasRequest } = useFriendRequests();
 
+  console.log(hasRequest);
+
   return (
     <>
       <Head>
@@ -71,14 +73,6 @@ const Friends = () => {
                 }
               }}
             />
-            {hasRequest && (
-              <button
-                className="fixed right-0 bottom-0 mr-16 mb-8 p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 shadow-lg"
-                onClick={() => setFriendRequestsOpen(true)}
-              >
-                <MailIcon className="w-8" />
-              </button>
-            )}
           </div>
         </>
       ) : (
@@ -95,6 +89,14 @@ const Friends = () => {
             Find Some!
           </button>
         </div>
+      )}
+      {hasRequest && (
+        <button
+          className="fixed right-0 bottom-0 mr-16 mb-8 p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 shadow-lg"
+          onClick={() => setFriendRequestsOpen(true)}
+        >
+          <MailIcon className="w-8" />
+        </button>
       )}
     </>
   );
