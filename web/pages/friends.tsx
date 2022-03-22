@@ -19,8 +19,6 @@ const Friends = () => {
   const [friendRequestsOpen, setFriendRequestsOpen] = useState(false);
   const { hasRequest } = useFriendRequests();
 
-  console.log(hasRequest);
-
   return (
     <>
       <Head>
