@@ -1,5 +1,7 @@
 # your-todo
 
+## Backend aplikácie nefunguje keďže Heroku ukončilo 28.10.2022 svoje free tier plány a ja za hosting pre toto platiť nejdem.
+
 Jednoduchá full-stack web aplikácia/hra slúžiaca len ako projekt na učenie/ukázanie.
 
 ## Hlavná myšlienka
